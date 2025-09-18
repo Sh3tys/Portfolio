@@ -1,0 +1,108 @@
+/* Section projets perso */
+#personal-projects {
+  padding: 50px 20px;
+  background: rgba(10, 25, 47, 0.6);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: #bfffc7; /* vert clair */
+}
+
+#personal-projects .pp-title {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 30px;
+  color: #bfffc7;
+}
+
+/* Grille responsive */
+#personal-projects .pp-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+}
+
+/* Carte projet */
+#personal-projects .pp-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+#personal-projects .pp-card-title {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  color: #bfffc7;
+}
+
+#personal-projects .pp-card-desc {
+  font-size: 0.95rem;
+  margin-bottom: 15px;
+  color: #d9fbe1;
+}
+
+/* Slider */
+#personal-projects .pp-slider {
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+#personal-projects .pp-images {
+  display: flex;
+  transition: transform 0.5s ease;
+}
+
+#personal-projects .pp-images img {
+  min-width: 100%;
+  height: auto;
+  object-fit: contain;
+  padding: 5px;
+}
+
+/* Flèches */
+#personal-projects .pp-prev,
+#personal-projects .pp-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 255, 150, 0.3);
+  color: #bfffc7;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  padding: 5px 10px;
+  border-radius: 5px;
+  z-index: 10;
+}
+
+#personal-projects .pp-prev:hover,
+#personal-projects .pp-next:hover {
+  background: rgba(0, 255, 150, 0.5);
+}
+
+#personal-projects .pp-prev {
+  left: 10px;
+}
+
+#personal-projects .pp-next {
+  right: 10px;
+}
+
+/* Lien */
+#personal-projects .pp-link {
+  display: inline-block;
+  padding: 10px 15px;
+  background: rgba(0, 255, 150, 0.3);
+  color: #bfffc7;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: background 0.3s ease;
+}
+
+#personal-projects .pp-link:hover {
+  background: rgba(0, 255, 150, 0.5);
+}
