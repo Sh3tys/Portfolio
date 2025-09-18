@@ -1,7 +1,6 @@
 /* Section projets perso */
 #personal-projects {
   padding: 50px 20px;
-  background: rgba(10, 25, 47, 0.6);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   color: #bfffc7; /* vert clair */
