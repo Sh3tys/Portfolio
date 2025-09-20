@@ -19,6 +19,9 @@
     <link rel="stylesheet" href="./projet/projet.css" />
     <script src="./projet/projet.js"></script>
 
+    <link rel="stylesheet" href="./contact/contact.css" />
+    <script src="./contact/contact.js"></script>
+
     <script
       type="module"
       src="https://unpkg.com/@splinetool/viewer@1.10.56/build/spline-viewer.js"
@@ -34,8 +37,8 @@
         <a href="#presentationF">// À propos \\</a>
         <a href="#skills">// Compétences \\</a>
         <a href="#experience">// Expérience \\</a>
-        <a href="#projects">// Projets \\</a>
-        <a href="#contact">// Contact \\</a>
+        <a href="#personal-projects">// Projets \\</a>
+        <a href="#contact-section-portfolio">// Contact \\</a>
       </nav>
 
       <div id="navMobile">
@@ -49,13 +52,15 @@
           <a href="#presentationF">- À propos -</a>
           <a href="#skills">- Compétences -</a>
           <a href="#experience">- Expérience -</a>
-          <a href="#projects">- Projets -</a>
-          <a href="#contact">- Contact -</a>
+          <a href="#personal-projects">- Projets -</a>
+          <a href="#contact-section-portfolio">- Contact -</a>
         </div>
       </div>
     </header>
 
     <main>
+
+      <!--  Section PRESENTATION  -->
       <div id="presentationF">
         <div id="divPicture">
           <img
@@ -103,8 +108,10 @@
         </div>
       </div>
 
+
+      <!--  Section COMPETENCE  -->
       <section id="skills" class="animate-in">
-        <h2 class="section-title">Compétences</h2>
+        <h2 class="section-title">- Compétences -</h2>
         <div class="skills-grid">
           <!-- Développement Web - Front-end -->
           <div class="skill-category">
@@ -197,11 +204,13 @@
           </div>
         </div>
       </section>
+    
 
+      <!--  Section PROJET  -->
       <section id="personal-projects">
-        <h2 class="pp-title">Mes Projets Personnels</h2>
+        <h2 class="pp-title">- Mes Projets Personnels -</h2>
         <div class="pp-grid">
-          <!-- Projet 1 -->
+
           <div class="pp-card">
             <h3 class="pp-card-title">Feu de Foret</h3>
             <p class="pp-card-desc">
@@ -212,64 +221,185 @@
             <div class="pp-slider">
               <button class="pp-prev">&#10094;</button>
               <div class="pp-images">
-                <img src="./asset/picture/Python/Capture d'écran 2025-09-18 180652.png" alt="Image 1" />
-                <img src="./asset/picture/Python/Capture d'écran 2025-09-18 180617.png" alt="Image 2" />
-                <img src="./asset/picture/Python/Capture d'écran 2025-09-18 180641.png" alt="Image 3" />
-                <img src="./asset/picture/Python/Capture d'écran 2025-09-18 180734.png" alt="Image 4" />
-                <img src="./asset/picture/Python/Capture d'écran 2025-09-18 180701.png" alt="Image 5" />
+                <img
+                  src="./asset/picture/Python/Capture d'écran 2025-09-18 180652.png"
+                  alt="Image 1"
+                />
+                <img
+                  src="./asset/picture/Python/Capture d'écran 2025-09-18 180617.png"
+                  alt="Image 2"
+                />
+                <img
+                  src="./asset/picture/Python/Capture d'écran 2025-09-18 180641.png"
+                  alt="Image 3"
+                />
+                <img
+                  src="./asset/picture/Python/Capture d'écran 2025-09-18 180734.png"
+                  alt="Image 4"
+                />
+                <img
+                  src="./asset/picture/Python/Capture d'écran 2025-09-18 180701.png"
+                  alt="Image 5"
+                />
               </div>
               <button class="pp-next">&#10095;</button>
             </div>
-            <a href="https://github.com/Sh3tys/simulateur_de_foret" class="pp-link">Voir plus sur GitHub</a>
+            <a
+              href="https://github.com/Sh3tys/simulateur_de_foret"
+              class="pp-link"
+              >Voir plus sur GitHub</a
+            >
           </div>
 
-          <!-- Projet 2 -->
           <div class="pp-card">
             <h3 class="pp-card-title">Gestion Restaurant</h3>
-            <p class="pp-card-desc">Application de gestion de restaurant en Java avec base de données MariaDB, incluant un menu personnalisé pour administrateur, cuisinier et serveur. Permet de créer et gérer les plats avec leurs ingrédients, suivre les stocks, consulter les recettes et contrôler les prix.</p>
+            <p class="pp-card-desc">
+              Application de gestion de restaurant en Java avec base de données
+              MariaDB, incluant un menu personnalisé pour administrateur,
+              cuisinier et serveur. Permet de créer et gérer les plats avec
+              leurs ingrédients, suivre les stocks, consulter les recettes et
+              contrôler les prix.
+            </p>
             <div class="pp-slider">
               <button class="pp-prev">&#10094;</button>
               <div class="pp-images">
-                <img src="./asset/picture/java/Capture d'écran 2025-09-18 173916.png" alt="Image 1" />
-                <img src="./asset/picture/java/Capture d'écran 2025-09-18 173828.png" alt="Image 2" />
-                <img src="./asset/picture/java/Capture d'écran 2025-09-18 173834.png" alt="Image 3" />
+                <img
+                  src="./asset/picture/java/Capture d'écran 2025-09-18 173916.png"
+                  alt="Image 1"
+                />
+                <img
+                  src="./asset/picture/java/Capture d'écran 2025-09-18 173828.png"
+                  alt="Image 2"
+                />
+                <img
+                  src="./asset/picture/java/Capture d'écran 2025-09-18 173834.png"
+                  alt="Image 3"
+                />
               </div>
               <button class="pp-next">&#10095;</button>
             </div>
-            <a href="https://github.com/Sh3tys/JavaProject" class="pp-link">Voir plus sur GitHub</a>
+            <a href="https://github.com/Sh3tys/JavaProject" class="pp-link"
+              >Voir plus sur GitHub</a
+            >
           </div>
 
-          <!-- Projet 3 -->
           <div class="pp-card">
             <h3 class="pp-card-title">Todo List Collaborative</h3>
-            <p class="pp-card-desc">Application Todo List développée en collaboration sur GitHub avec gestion de branches et features séparées. Permet de créer, modifier et supprimer plusieurs listes de tâches, offrant une organisation efficace et collaborative.</p>
+            <p class="pp-card-desc">
+              Application Todo List développée en collaboration sur GitHub avec
+              gestion de branches et features séparées. Permet de créer,
+              modifier et supprimer plusieurs listes de tâches, offrant une
+              organisation efficace et collaborative.
+            </p>
             <div class="pp-slider">
               <button class="pp-prev">&#10094;</button>
               <div class="pp-images">
-                <img src="./asset/picture/JS/Capture d'écran 2025-09-18 181513.png" alt="Image 1" />
-                <img src="./asset/picture/JS/Capture d'écran 2025-09-18 181521.png" alt="Image 2" />
-                <img src="./asset/picture/JS/Capture d'écran 2025-09-18 181659.png" alt="Image 3" />
-                <img src="./asset/picture/JS/Capture d'écran 2025-09-18 181712.png" alt="Image 4" />
+                <img
+                  src="./asset/picture/JS/Capture d'écran 2025-09-18 181513.png"
+                  alt="Image 1"
+                />
+                <img
+                  src="./asset/picture/JS/Capture d'écran 2025-09-18 181521.png"
+                  alt="Image 2"
+                />
+                <img
+                  src="./asset/picture/JS/Capture d'écran 2025-09-18 181659.png"
+                  alt="Image 3"
+                />
+                <img
+                  src="./asset/picture/JS/Capture d'écran 2025-09-18 181712.png"
+                  alt="Image 4"
+                />
               </div>
               <button class="pp-next">&#10095;</button>
             </div>
-            <a href="https://github.com/Sh3tys/todo-list" class="pp-link">Voir plus sur GitHub</a>
+            <a href="https://github.com/Sh3tys/todo-list" class="pp-link"
+              >Voir plus sur GitHub</a
+            >
           </div>
         </div>
       </section>
 
-      <section id="contact">
-        <h2>Contact SOON</h2>
-        <p>
-          Retrouvez-moi sur
-          <a
-            href="https://www.linkedin.com/in/titouan-conquéré-de-monbrison"
-            target="_blank"
-            >LinkedIn</a
+
+      <!--  Section CONTACT  -->
+      <section id="contact-section-portfolio">
+        <h2 class="contact-title-portfolio">- Contacte -</h2>
+        <div class="contact-grid-portfolio">
+          <div
+            class="contact-card-portfolio"
+            data-link="mailto:titouan.conquere-de-monbrison@efrei.net"
           >
-          ou envoyez-moi un email.
-        </p>
+            <div class="contact-card-content">
+              <i class="fas fa-envelope"></i>
+              <h3 class="contact-card-title">Email Pro</h3>
+              <p class="contact-card-info">titouan.conquere-de-monbrison@efrei.net</p>
+            </div>
+            <button class="contact-card-btn">Envoyer un mail</button>
+          </div>
+
+          <div
+            class="contact-card-portfolio"
+            data-link="mailto:titouan.cdm@outlook.fr"
+          >
+            <div class="contact-card-content">
+              <i class="fas fa-envelope-open"></i>
+              <h3 class="contact-card-title">Email Perso</h3>
+              <p class="contact-card-info">titouan.cdm@outlook.fr</p>
+            </div>
+            <button class="contact-card-btn">Envoyer un mail</button>
+          </div>
+
+          <div class="contact-card-portfolio" data-link="tel:+33666186563">
+            <div class="contact-card-content">
+              <i class="fas fa-phone-alt"></i>
+              <h3 class="contact-card-title">Téléphone</h3>
+              <p class="contact-card-info">(+33) 06 66 18 65 63</p>
+            </div>
+            <button class="contact-card-btn">Appeler</button>
+          </div>
+
+          <div
+            class="contact-card-portfolio"
+            data-link="https://github.com/Sh3tys"
+          >
+            <div class="contact-card-content">
+              <i class="fab fa-github"></i>
+              <h3 class="contact-card-title">GitHub</h3>
+              <p class="contact-card-info">github.com/Sh3tys</p>
+            </div>
+            <button class="contact-card-btn">Voir</button>
+          </div>
+
+          <div
+            class="contact-card-portfolio"
+            data-link="https://www.linkedin.com/in/titouan-conquere-de-monbrison"
+          >
+            <div class="contact-card-content">
+              <i class="fab fa-linkedin"></i>
+              <h3 class="contact-card-title">LinkedIn</h3>
+              <p class="contact-card-info">@titouan-conquere-de-monbrison</p>
+            </div>
+            <button class="contact-card-btn">Voir</button>
+          </div>
+
+          <div
+            class="contact-card-portfolio"
+            data-link="https://www.instagram.com/titouan_c_d_m"
+          >
+            <div class="contact-card-content">
+              <i class="fab fa-instagram"></i>
+              <h3 class="contact-card-title">Instagram</h3>
+              <p class="contact-card-info">@titouan_c_d_m</p>
+            </div>
+            <button class="contact-card-btn">Voir</button>
+          </div>
+        </div>
       </section>
+
+      <script
+        src="https://kit.fontawesome.com/a2d9d5f51d.js"
+        crossorigin="anonymous"
+      ></script>
     </main>
   </body>
 </html>
