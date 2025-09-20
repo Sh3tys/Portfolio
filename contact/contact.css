@@ -12,24 +12,28 @@
   color: #bfffc7;
 }
 
-/* GRID */
+/* GRID avec wrap */
 #contact-section-portfolio .contact-grid-portfolio {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  display: flex;
+  flex-wrap: wrap; /* permet le passage à la ligne */
+  justify-content: center; /* centre les cartes horizontalement */
   gap: 25px;
   max-width: 1000px;
   margin: 0 auto;
 }
 
-/* CARD */
+/* CARDS - largeur flexible pour s'adapter au wrap */
 #contact-section-portfolio .contact-card-portfolio {
+  flex: 1 1 250px; /* flex-grow | flex-shrink | flex-basis */
+  max-width: 300px; /* limite la taille maximum */
+  min-width: 200px;
   position: relative;
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border-radius: 15px;
   padding: 20px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   transition: background 0.3s ease, transform 0.3s ease;
   display: flex;
   flex-direction: column;
