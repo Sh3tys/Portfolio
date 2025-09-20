@@ -59,7 +59,6 @@
   min-width: 100%;
   height: auto;
   object-fit: contain;
-  padding: 5px;
 }
 
 /* Flèches */
@@ -68,18 +67,21 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(0, 255, 150, 0.3);
-  color: #bfffc7;
+  background: rgba(6, 70, 44, 0.5);
+  color: #bfffc8a5;
   border: none;
   font-size: 2rem;
   cursor: pointer;
-  padding: 5px 10px;
+  padding: 0 5px;
   border-radius: 5px;
   z-index: 10;
 }
 
 #personal-projects .pp-prev:hover,
 #personal-projects .pp-next:hover {
+  color: #2b382d;
+  padding: 5px 7px;
+  border-radius: 7px;
   background: rgba(0, 255, 150, 0.5);
 }
 
@@ -94,6 +96,8 @@
 /* Lien */
 #personal-projects .pp-link {
   display: inline-block;
+  align-items: flex-end;
+  justify-content: end;
   padding: 10px 15px;
   background: rgba(0, 255, 150, 0.3);
   color: #bfffc7;
