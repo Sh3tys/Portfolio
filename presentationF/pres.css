@@ -101,9 +101,18 @@
   }
 
   #aboutBtn:hover {
-    background-color: #0088cc;
+    background-color: #02547d;
     padding: 0.7rem 1.3rem;
   }
+
+@media (min-width: 480px) {
+  #aboutBtn {
+    padding: 1rem 2.2rem;
+    position: relative;
+    top: 120px;
+    
+  }
+}
 
   #aboutMe {
     max-width: 700px;
