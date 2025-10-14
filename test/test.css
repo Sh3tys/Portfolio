@@ -1,0 +1,25 @@
+
+
+#deroulant{
+    font-size: 2.5rem;
+}
+
+#deroulant > span{
+    overflow: hidden;
+    display: inline-block;
+    vertical-align: top;
+    height: 2.5rem;
+}
+
+#deroulant > span > span{
+    display: block;
+    animation: animateWords 5s infinite ease;
+}
+
+@keyframes animateWords {
+    0%{transform: translateY(0%);}
+    25%{transform: translateY(-100%);}
+    50%{transform: translateY(-200%);}
+    75%{transform: translateY(-300%);}
+    100%{transform: translateY(-400%);}   
+}

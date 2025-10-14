@@ -88,13 +88,15 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: var(--bg-primary);
+  background: var(--bg-color);
+  z-index: 2000;
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 9999;
   transition: opacity 0.5s ease;
+  pointer-events: none;
 }
+
 
 /* Spinner animé */
 .spinner {
@@ -268,6 +270,7 @@ body[data-theme="light"] .floating-element {
    SPLINE VIEWER
    ======================================== */
 spline-viewer {
+  pointer-events: none;
   position: fixed;
   left: 40%;
   top: 29%;
@@ -485,6 +488,40 @@ p {
   margin-left: 200px;
   margin-top: 50px;
 }
+
+#deroulant{
+    font-size: 1.5rem;
+}
+
+#deroulant > span{
+    overflow: hidden;
+    display: inline-block;
+    vertical-align: top;
+    height: 1.5rem;
+}
+/* +++++++++++++ LISTE DEROULANT +++++++++++++ */
+.line {
+  height: 1.5em;
+}
+
+#deroulant > span > span {
+  display: block;
+  animation: animateWords 10s ease-in-out infinite;
+  text-align: left;
+}
+
+/* Animation avec pauses */
+@keyframes animateWords {
+  0%, 10% { transform: translateY(0%); }          /* Mobile */
+  20%, 30% { transform: translateY(-100%); }      /* Back-end */
+  40%, 50% { transform: translateY(-200%); }      /* Web */
+  60%, 70% { transform: translateY(-300%); }      /* Application */
+  80%, 90% { transform: translateY(-400%); }      /* Front-end */
+  100% { transform: translateY(-500%); }          /* Mobile (boucle) */
+}
+
+
+/* +++++++++++++ fin LISTE DEROULANT +++++++++++++ */
 
 #presentationF .intro-text {
   opacity: 0.8;
