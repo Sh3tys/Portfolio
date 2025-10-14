@@ -3,26 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-     <link rel="icon" type="image/x-icon" href="./asset/picture/logo perso.png">
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="./asset/picture/logo perso.png"
+    />
     <title>Portfolio - Titouan</title>
     <link rel="stylesheet" href="./index.css" />
-    <script src="./index.js"></script>
-
-    <link rel="stylesheet" href="./menu/menu.css" />
-    <script src="./menu/ScriptMenu.js"></script>
-
-    <link rel="stylesheet" href="./presentationF/pres.css" />
-    <script src="./presentationF/pres.js"></script>
-
-    <link rel="stylesheet" href="./competence/competence.Css" />
-    <script src="./competence/competence.js"></script>
-
-    <link rel="stylesheet" href="./projet/projet.css" />
-    <script src="./projet/projet.js"></script>
-
-    <link rel="stylesheet" href="./contact/contact.css" />
-    <script src="./contact/contact.js"></script>
-
+    <script src="./index.js" defer></script>
     <script
       type="module"
       src="https://unpkg.com/@splinetool/viewer@1.10.56/build/spline-viewer.js"
@@ -34,10 +22,9 @@
     ></spline-viewer>
 
     <header>
-      <nav>
+      <nav id="desktop-nav">
         <a href="#presentationF">// À propos \\</a>
         <a href="#skills">// Compétences \\</a>
-        <!--<a href="#experience">// Expérience \\</a>-->
         <a href="#personal-projects">// Projets \\</a>
         <a href="#contact-section-portfolio">// Contact \\</a>
       </nav>
@@ -52,7 +39,6 @@
         <div id="mobile-menu">
           <a href="#presentationF">- À propos -</a>
           <a href="#skills">- Compétences -</a>
-          <!--<a href="#experience">- Expérience -</a>-->
           <a href="#personal-projects">- Projets -</a>
           <a href="#contact-section-portfolio">- Contact -</a>
         </div>
@@ -60,14 +46,13 @@
     </header>
 
     <main>
-
-      <!--  Section PRESENTATION  -->
+      <!-- Section PRESENTATION -->
       <div id="presentationF">
         <div id="divPicture">
           <img
             id="pictureProfile"
-            src="./Photo profile CV.jpeg"
-            alt="photo de profile"
+            src="./asset/picture/Photo profile CV.jpeg"
+            alt="photo de profil"
           />
         </div>
         <div class="wrap">
@@ -78,43 +63,33 @@
             <span id="dynamic" class="dynamic" aria-hidden="true"></span>
           </div>
 
-          <p
-            style="
-              opacity: 0.8;
-              margin-top: 1rem;
-              font-size: 1rem;
-              line-height: 1.5;
-            "
-          >
-            En formation à l'Efrei Paris en développement Web et Application
-            pour devenir développeur FullStack à terme. Je suis passionné par le
-            développement de projets innovants qui associe
+          <p class="intro-text">
+            En formation à l'Efrei Paris en développement web et applicatif pour
+            devenir développeur FullStack à terme. Je suis passionné par le
+            développement de projets innovants qui associent
             <strong style="color: #00aaff">Code</strong> et
             <strong style="color: #00aaff">Esprit d'équipe</strong>.
           </p>
-          <!-- ✅ Bouton About Me -->
+
           <button id="aboutBtn">About Me</button>
 
-          <!-- ✅ Texte approfondi (caché par défaut) -->
-          <div id="aboutMe" style="display: none">
+          <div id="aboutMe">
             Développeur en formation, je conçois et améliore des solutions
             logicielles avec une attention particulière à la performance et à
-            l’expérience utilisateur. Diplômé d’un baccalauréat à Tahiti, j’ai
-            choisi de poursuivre mes études à l’Efrei Paris pour me
-            perfectionner en développement web et applicatif. Ce parcours m’a
-            permis d’acquérir une maîtrise des technologies clés telles que
-            Java, Python et JavaScript. Aujourd’hui, je souhaite mettre ces
+            l'expérience utilisateur. Diplômé d'un baccalauréat à Tahiti, j'ai
+            choisi de poursuivre mes études à l'Efrei Paris pour me
+            perfectionner en développement web et applicatif. Ce parcours m'a
+            permis d'acquérir une maîtrise des technologies clés telles que
+            Java, Python et JavaScript. Aujourd'hui, je souhaite mettre ces
             compétences au service de projets ambitieux et collaboratifs.
           </div>
         </div>
       </div>
 
-
-      <!--  Section COMPETENCE  -->
+      <!-- Section COMPETENCE -->
       <section id="skills" class="animate-in">
         <h2 class="section-title">- Compétences -</h2>
         <div class="skills-grid">
-          <!-- Développement Web - Front-end -->
           <div class="skill-category">
             <h3>💻 Développement Web (Front-end)</h3>
             <div class="skills-list">
@@ -129,7 +104,6 @@
             </div>
           </div>
 
-          <!-- Développement Web - Back-end -->
           <div class="skill-category">
             <h3>💻 Développement Web (Back-end)</h3>
             <div class="skills-list">
@@ -139,7 +113,6 @@
             </div>
           </div>
 
-          <!-- Langages -->
           <div class="skill-category">
             <h3>📝 Langages</h3>
             <div class="skills-list">
@@ -151,7 +124,6 @@
             </div>
           </div>
 
-          <!-- Bases de Données & Cloud -->
           <div class="skill-category">
             <h3>🗄️ Bases de Données & Cloud</h3>
             <div class="skills-list">
@@ -162,7 +134,6 @@
             </div>
           </div>
 
-          <!-- CMS & Plateformes -->
           <div class="skill-category">
             <h3>🖥️ CMS & Plateformes</h3>
             <div class="skills-list">
@@ -170,7 +141,6 @@
             </div>
           </div>
 
-          <!-- Outils & DevOps -->
           <div class="skill-category">
             <h3>🛠️ Outils & DevOps</h3>
             <div class="skills-list">
@@ -185,16 +155,14 @@
             </div>
           </div>
 
-          <!-- Sécurité -->
           <div class="skill-category">
-            <h3>🔐 Sécurité & Bonnes pratiques</h3>
+            <h3>🔒 Sécurité & Bonnes pratiques</h3>
             <div class="skills-list">
               <span class="skill-tag">Sécurité Web (XSS, SQLi)</span>
               <span class="skill-tag">Gestion des rôles et permissions</span>
             </div>
           </div>
 
-          <!-- Autres -->
           <div class="skill-category">
             <h3>🎮 Autres</h3>
             <div class="skills-list">
@@ -205,17 +173,15 @@
           </div>
         </div>
       </section>
-    
 
-      <!--  Section PROJET  -->
+      <!-- Section PROJET -->
       <section id="personal-projects">
         <h2 class="pp-title">- Mes Projets Personnels -</h2>
         <div class="pp-grid">
-
           <div class="pp-card">
-            <h3 class="pp-card-title">Feu de Foret</h3>
+            <h3 class="pp-card-title">Feu de Forêt</h3>
             <p class="pp-card-desc">
-              Simulation réaliste d’incendies de forêt développée en Python avec
+              Simulation réaliste d’incendie de forêt développée en Python avec
               Pygame, permettant de moduler la densité de la forêt et le point
               d’origine du feu pour observer sa propagation dynamique.
             </p>
@@ -321,8 +287,7 @@
         </div>
       </section>
 
-
-      <!--  Section CONTACT  -->
+      <!-- Section CONTACT -->
       <section id="contact-section-portfolio">
         <h2 class="contact-title-portfolio">- Contact -</h2>
         <div class="contact-grid-portfolio">
@@ -333,7 +298,9 @@
             <div class="contact-card-content">
               <i class="fas fa-envelope"></i>
               <h3 class="contact-card-title">Email Pro</h3>
-              <p class="contact-card-info">titouan.conquere-de-monbrison@efrei.net</p>
+              <p class="contact-card-info">
+                titouan.conquere-de-monbrison@efrei.net
+              </p>
             </div>
             <button class="contact-card-btn">Envoyer un mail</button>
           </div>
