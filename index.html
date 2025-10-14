@@ -3,30 +3,36 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      rel="icon"
-      type="image/x-icon"
-      href="./asset/picture/logo perso.png"
-    />
+    <link rel="icon" type="image/x-icon" href="./asset/picture/logo perso.png" />
     <title>Portfolio - Titouan</title>
-    <link rel="stylesheet" href="./index.css" />
-    <script src="./index.js" defer></script>
+    <link rel="stylesheet" href="./styles.css" />
+    <script src="./script.js" defer></script>
     <script
       type="module"
       src="https://unpkg.com/@splinetool/viewer@1.10.56/build/spline-viewer.js"
     ></script>
   </head>
-  <body>
+  <body data-theme="dark">
+    <!-- Bouton de changement de thème -->
+    <button id="theme-toggle" aria-label="Changer de thème">
+      <span class="theme-icon sun-icon">☀️</span>
+      <span class="theme-icon moon-icon active">🌙</span>
+    </button>
+
+    <!-- Éléments décoratifs animés -->
+    <div id="decorative-elements"></div>
+
     <spline-viewer
       url="https://prod.spline.design/ICf1N0uh9tEJ4gOY/scene.splinecode"
     ></spline-viewer>
 
     <header>
       <nav id="desktop-nav">
-        <a href="#presentationF">// À propos \\</a>
-        <a href="#skills">// Compétences \\</a>
-        <a href="#personal-projects">// Projets \\</a>
-        <a href="#contact-section-portfolio">// Contact \\</a>
+        <a href="#presentationF">À propos</a>
+        <a href="#skills">Compétences</a>
+        <a href="#experience-section">Expérience</a>
+        <a href="#personal-projects">Projets</a>
+        <a href="#contact-section-portfolio">Contact</a>
       </nav>
 
       <div id="navMobile">
@@ -39,6 +45,7 @@
         <div id="mobile-menu">
           <a href="#presentationF">- À propos -</a>
           <a href="#skills">- Compétences -</a>
+          <a href="#experience-section">- Expérience -</a>
           <a href="#personal-projects">- Projets -</a>
           <a href="#contact-section-portfolio">- Contact -</a>
         </div>
@@ -47,15 +54,15 @@
 
     <main>
       <!-- Section PRESENTATION -->
-      <div id="presentationF">
-        <div id="divPicture">
+      <div id="presentationF" class="scroll-reveal">
+        <div id="divPicture" class="scroll-reveal-left">
           <img
             id="pictureProfile"
             src="./asset/picture/Photo profile CV.jpeg"
             alt="photo de profil"
           />
         </div>
-        <div class="wrap">
+        <div class="wrap scroll-reveal-right">
           <h1>Titouan Conquéré de Monbrison</h1>
 
           <div class="line" aria-live="polite">
@@ -67,8 +74,8 @@
             En formation à l'Efrei Paris en développement web et applicatif pour
             devenir développeur FullStack à terme. Je suis passionné par le
             développement de projets innovants qui associent
-            <strong style="color: #00aaff">Code</strong> et
-            <strong style="color: #00aaff">Esprit d'équipe</strong>.
+            <strong class="highlight-text">Code</strong> et
+            <strong class="highlight-text">Esprit d'équipe</strong>.
           </p>
 
           <button id="aboutBtn">About Me</button>
@@ -87,10 +94,10 @@
       </div>
 
       <!-- Section COMPETENCE -->
-      <section id="skills" class="animate-in">
+      <section id="skills" class="animate-in scroll-reveal">
         <h2 class="section-title">- Compétences -</h2>
         <div class="skills-grid">
-          <div class="skill-category">
+          <div class="skill-category scroll-reveal-item">
             <h3>💻 Développement Web (Front-end)</h3>
             <div class="skills-list">
               <span class="skill-tag">HTML5</span>
@@ -104,7 +111,7 @@
             </div>
           </div>
 
-          <div class="skill-category">
+          <div class="skill-category scroll-reveal-item">
             <h3>💻 Développement Web (Back-end)</h3>
             <div class="skills-list">
               <span class="skill-tag">Django</span>
@@ -113,7 +120,7 @@
             </div>
           </div>
 
-          <div class="skill-category">
+          <div class="skill-category scroll-reveal-item">
             <h3>📝 Langages</h3>
             <div class="skills-list">
               <span class="skill-tag">Python</span>
@@ -124,7 +131,7 @@
             </div>
           </div>
 
-          <div class="skill-category">
+          <div class="skill-category scroll-reveal-item">
             <h3>🗄️ Bases de Données & Cloud</h3>
             <div class="skills-list">
               <span class="skill-tag">PostgreSQL</span>
@@ -134,14 +141,14 @@
             </div>
           </div>
 
-          <div class="skill-category">
+          <div class="skill-category scroll-reveal-item">
             <h3>🖥️ CMS & Plateformes</h3>
             <div class="skills-list">
               <span class="skill-tag">WordPress</span>
             </div>
           </div>
 
-          <div class="skill-category">
+          <div class="skill-category scroll-reveal-item">
             <h3>🛠️ Outils & DevOps</h3>
             <div class="skills-list">
               <span class="skill-tag">Git</span>
@@ -155,7 +162,7 @@
             </div>
           </div>
 
-          <div class="skill-category">
+          <div class="skill-category scroll-reveal-item">
             <h3>🔒 Sécurité & Bonnes pratiques</h3>
             <div class="skills-list">
               <span class="skill-tag">Sécurité Web (XSS, SQLi)</span>
@@ -163,7 +170,7 @@
             </div>
           </div>
 
-          <div class="skill-category">
+          <div class="skill-category scroll-reveal-item">
             <h3>🎮 Autres</h3>
             <div class="skills-list">
               <span class="skill-tag">Administration Serveur Minecraft</span>
@@ -174,51 +181,78 @@
         </div>
       </section>
 
+      <!-- Section EXPÉRIENCE -->
+      <section id="experience-section" class="scroll-reveal">
+        <h2 class="experience-title">Mon expérience professionnelle</h2>
+        <div class="experience-container scroll-reveal-scale">
+          <div class="experience-image">
+            <a href="https://www.activops.fr" target="_blank" rel="noopener noreferrer">
+              <img src="./asset/picture/Logo_Activops.png" alt="Stage chez ActivOps" />
+            </a>
+          </div>
+
+          <div class="experience-content">
+            <h3>Stage de 2 mois chez <span class="highlight">ActivOps</span></h3>
+            <p class="experience-role">Développeur Web — Juin à Août 2025</p>
+
+            <p class="experience-text">
+              Lors de ce stage, j'ai participé au
+              <strong>développement complet du site web vitrine</strong> de
+              l'entreprise <strong>ActivOps</strong>, spécialisée dans les
+              solutions ERP, CRM et Power Platform. J'ai travaillé sur
+              l'architecture du site sous <strong>WordPress</strong> avec le
+              thème <strong>Divi</strong>, tout en veillant à l'optimisation du
+              référencement (SEO) et à la performance.
+            </p>
+
+            <p class="experience-text">
+              J'ai également contribué à la
+              <strong>mise en ligne et au déploiement</strong> du site, à la
+              création de visuels professionnels, et à la
+              <strong>documentation technique</strong> pour assurer la
+              maintenance future.
+            </p>
+
+            <div class="experience-tags">
+              <span class="exp-tag">WordPress</span>
+              <span class="exp-tag">Divi</span>
+              <span class="exp-tag">SEO</span>
+              <span class="exp-tag">Power BI</span>
+              <span class="exp-tag">Power Apps</span>
+            </div>
+            <a href="https://www.activops.fr" target="_blank" rel="noopener noreferrer" class="experience-button">
+              Voir le site
+            </a>
+          </div>
+        </div>
+      </section>
+
       <!-- Section PROJET -->
-      <section id="personal-projects">
+      <section id="personal-projects" class="scroll-reveal">
         <h2 class="pp-title">- Mes Projets Personnels -</h2>
         <div class="pp-grid">
-          <div class="pp-card">
+          <div class="pp-card scroll-reveal-item">
             <h3 class="pp-card-title">Feu de Forêt</h3>
             <p class="pp-card-desc">
-              Simulation réaliste d’incendie de forêt développée en Python avec
+              Simulation réaliste d'incendie de forêt développée en Python avec
               Pygame, permettant de moduler la densité de la forêt et le point
-              d’origine du feu pour observer sa propagation dynamique.
+              d'origine du feu pour observer sa propagation dynamique.
             </p>
             <div class="pp-slider">
               <button class="pp-prev">&#10094;</button>
               <div class="pp-images">
-                <img
-                  src="./asset/picture/Python/Capture d'écran 2025-09-18 180652.png"
-                  alt="Image 1"
-                />
-                <img
-                  src="./asset/picture/Python/Capture d'écran 2025-09-18 180617.png"
-                  alt="Image 2"
-                />
-                <img
-                  src="./asset/picture/Python/Capture d'écran 2025-09-18 180641.png"
-                  alt="Image 3"
-                />
-                <img
-                  src="./asset/picture/Python/Capture d'écran 2025-09-18 180734.png"
-                  alt="Image 4"
-                />
-                <img
-                  src="./asset/picture/Python/Capture d'écran 2025-09-18 180701.png"
-                  alt="Image 5"
-                />
+                <img src="./asset/picture/Python/Capture d'écran 2025-09-18 180652.png" alt="Image 1" />
+                <img src="./asset/picture/Python/Capture d'écran 2025-09-18 180617.png" alt="Image 2" />
+                <img src="./asset/picture/Python/Capture d'écran 2025-09-18 180641.png" alt="Image 3" />
+                <img src="./asset/picture/Python/Capture d'écran 2025-09-18 180734.png" alt="Image 4" />
+                <img src="./asset/picture/Python/Capture d'écran 2025-09-18 180701.png" alt="Image 5" />
               </div>
               <button class="pp-next">&#10095;</button>
             </div>
-            <a
-              href="https://github.com/Sh3tys/simulateur_de_foret"
-              class="pp-link"
-              >Voir plus sur GitHub</a
-            >
+            <a href="https://github.com/Sh3tys/simulateur_de_foret" class="pp-link">Voir plus sur GitHub</a>
           </div>
 
-          <div class="pp-card">
+          <div class="pp-card scroll-reveal-item">
             <h3 class="pp-card-title">Gestion Restaurant</h3>
             <p class="pp-card-desc">
               Application de gestion de restaurant en Java avec base de données
@@ -230,27 +264,16 @@
             <div class="pp-slider">
               <button class="pp-prev">&#10094;</button>
               <div class="pp-images">
-                <img
-                  src="./asset/picture/java/Capture d'écran 2025-09-18 173916.png"
-                  alt="Image 1"
-                />
-                <img
-                  src="./asset/picture/java/Capture d'écran 2025-09-18 173828.png"
-                  alt="Image 2"
-                />
-                <img
-                  src="./asset/picture/java/Capture d'écran 2025-09-18 173834.png"
-                  alt="Image 3"
-                />
+                <img src="./asset/picture/java/Capture d'écran 2025-09-18 173916.png" alt="Image 1" />
+                <img src="./asset/picture/java/Capture d'écran 2025-09-18 173828.png" alt="Image 2" />
+                <img src="./asset/picture/java/Capture d'écran 2025-09-18 173834.png" alt="Image 3" />
               </div>
               <button class="pp-next">&#10095;</button>
             </div>
-            <a href="https://github.com/Sh3tys/JavaProject" class="pp-link"
-              >Voir plus sur GitHub</a
-            >
+            <a href="https://github.com/Sh3tys/JavaProject" class="pp-link">Voir plus sur GitHub</a>
           </div>
 
-          <div class="pp-card">
+          <div class="pp-card scroll-reveal-item">
             <h3 class="pp-card-title">Todo List Collaborative</h3>
             <p class="pp-card-desc">
               Application Todo List développée en collaboration sur GitHub avec
@@ -261,63 +284,41 @@
             <div class="pp-slider">
               <button class="pp-prev">&#10094;</button>
               <div class="pp-images">
-                <img
-                  src="./asset/picture/JS/Capture d'écran 2025-09-18 181513.png"
-                  alt="Image 1"
-                />
-                <img
-                  src="./asset/picture/JS/Capture d'écran 2025-09-18 181521.png"
-                  alt="Image 2"
-                />
-                <img
-                  src="./asset/picture/JS/Capture d'écran 2025-09-18 181659.png"
-                  alt="Image 3"
-                />
-                <img
-                  src="./asset/picture/JS/Capture d'écran 2025-09-18 181712.png"
-                  alt="Image 4"
-                />
+                <img src="./asset/picture/JS/Capture d'écran 2025-09-18 181513.png" alt="Image 1" />
+                <img src="./asset/picture/JS/Capture d'écran 2025-09-18 181521.png" alt="Image 2" />
+                <img src="./asset/picture/JS/Capture d'écran 2025-09-18 181659.png" alt="Image 3" />
+                <img src="./asset/picture/JS/Capture d'écran 2025-09-18 181712.png" alt="Image 4" />
               </div>
               <button class="pp-next">&#10095;</button>
             </div>
-            <a href="https://github.com/Sh3tys/todo-list" class="pp-link"
-              >Voir plus sur GitHub</a
-            >
+            <a href="https://github.com/Sh3tys/todo-list" class="pp-link">Voir plus sur GitHub</a>
           </div>
         </div>
       </section>
 
       <!-- Section CONTACT -->
-      <section id="contact-section-portfolio">
+      <section id="contact-section-portfolio" class="scroll-reveal">
         <h2 class="contact-title-portfolio">- Contact -</h2>
         <div class="contact-grid-portfolio">
-          <div
-            class="contact-card-portfolio"
-            data-link="mailto:titouan.conquere-de-monbrison@efrei.net"
-          >
+          <div class="contact-card-portfolio scroll-reveal-item" data-link="mailto:titouan.conquere-de-monbrison@efrei.net">
             <div class="contact-card-content">
               <i class="fas fa-envelope"></i>
               <h3 class="contact-card-title">Email Pro</h3>
-              <p class="contact-card-info">
-                titouan.conquere-de-monbrison@efrei.net
-              </p>
+              <p class="contact-card-info">titouan.conquere-de-monbrison@efrei.net</p>
             </div>
-            <button class="contact-card-btn">Envoyer un mail</button>
+            <button class="contact-card-btn">Contacter</button>
           </div>
 
-          <div
-            class="contact-card-portfolio"
-            data-link="mailto:titouan.cdm@outlook.fr"
-          >
+          <div class="contact-card-portfolio scroll-reveal-item" data-link="mailto:titouan.cdm@outlook.fr">
             <div class="contact-card-content">
               <i class="fas fa-envelope-open"></i>
               <h3 class="contact-card-title">Email Perso</h3>
               <p class="contact-card-info">titouan.cdm@outlook.fr</p>
             </div>
-            <button class="contact-card-btn">Envoyer un mail</button>
+            <button class="contact-card-btn">Contacter</button>
           </div>
 
-          <div class="contact-card-portfolio" data-link="tel:+33666186563">
+          <div class="contact-card-portfolio scroll-reveal-item" data-link="tel:+33666186563">
             <div class="contact-card-content">
               <i class="fas fa-phone-alt"></i>
               <h3 class="contact-card-title">Téléphone</h3>
@@ -326,10 +327,7 @@
             <button class="contact-card-btn">Appeler</button>
           </div>
 
-          <div
-            class="contact-card-portfolio"
-            data-link="https://github.com/Sh3tys"
-          >
+          <div class="contact-card-portfolio scroll-reveal-item" data-link="https://github.com/Sh3tys">
             <div class="contact-card-content">
               <i class="fab fa-github"></i>
               <h3 class="contact-card-title">GitHub</h3>
@@ -338,10 +336,7 @@
             <button class="contact-card-btn">Voir</button>
           </div>
 
-          <div
-            class="contact-card-portfolio"
-            data-link="https://www.linkedin.com/in/titouan-conquere-de-monbrison"
-          >
+          <div class="contact-card-portfolio scroll-reveal-item" data-link="https://www.linkedin.com/in/titouan-conquere-de-monbrison">
             <div class="contact-card-content">
               <i class="fab fa-linkedin"></i>
               <h3 class="contact-card-title">LinkedIn</h3>
@@ -350,10 +345,7 @@
             <button class="contact-card-btn">Voir</button>
           </div>
 
-          <div
-            class="contact-card-portfolio"
-            data-link="https://www.instagram.com/titouan_c_d_m"
-          >
+          <div class="contact-card-portfolio scroll-reveal-item" data-link="https://www.instagram.com/titouan_c_d_m">
             <div class="contact-card-content">
               <i class="fab fa-instagram"></i>
               <h3 class="contact-card-title">Instagram</h3>
@@ -364,10 +356,7 @@
         </div>
       </section>
 
-      <script
-        src="https://kit.fontawesome.com/a2d9d5f51d.js"
-        crossorigin="anonymous"
-      ></script>
+      <script src="https://kit.fontawesome.com/a2d9d5f51d.js" crossorigin="anonymous"></script>
     </main>
   </body>
 </html>
