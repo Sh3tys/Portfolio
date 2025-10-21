@@ -44,8 +44,6 @@ Ce portfolio est une vitrine interactive et moderne, pensée pour refléter mon 
 │
 └── README.md # Ce fichier
 
-````
-
 ---
 
 ## 💡 Fonctionnalités principales
@@ -91,5 +89,4 @@ Mon objectif est de proposer un **code clair, commenté et maintenable**, en res
 
 --
 Merci de visiter mon portfolio ! N’hésitez pas à me contacter pour toute opportunité ou collaboration.
-```
-````
+
