@@ -11,10 +11,6 @@
     <title>Portfolio - Titouan</title>
     <link rel="stylesheet" href="./styles.css" />
     <script src="./script.js" defer></script>
-    <script
-      type="module"
-      src="https://unpkg.com/@splinetool/viewer@1.10.56/build/spline-viewer.js"
-    ></script>
   </head>
   <body data-theme="dark">
     <!-- Loader -->
@@ -22,18 +18,10 @@
       <div class="spinner"></div>
     </div>
 
-    <!-- Bouton de changement de thème -->
     <button id="theme-toggle" aria-label="Changer de thème">
       <span class="theme-icon sun-icon">☀️</span>
       <span class="theme-icon moon-icon active">🌙</span>
     </button>
-
-    <!-- Éléments décoratifs animés -->
-    <div id="decorative-elements"></div>
-
-    <spline-viewer
-      url="https://prod.spline.design/ICf1N0uh9tEJ4gOY/scene.splinecode"
-    ></spline-viewer>
 
     <header>
       <nav id="desktop-nav">
@@ -448,6 +436,7 @@
             <button class="contact-card-btn">Voir</button>
           </div>
         </div>
+        <button id="CVBtn">Télécharger mon CV</button>
       </section>
 
       <script
