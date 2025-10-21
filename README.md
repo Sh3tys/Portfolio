@@ -25,7 +25,6 @@ Ce portfolio est une vitrine interactive et moderne, pensée pour refléter mon 
 🎨 **Librairies & outils** :
 
 - [Poppins](https://fonts.google.com/specimen/Poppins) & [Roboto Mono](https://fonts.google.com/specimen/Roboto+Mono) pour la typographie
-- [Spline](https://spline.design/) pour les animations 3D intégrées
 - Responsive design (mobile, tablette, desktop)
 
 ---
@@ -78,35 +77,6 @@ Mon objectif est de proposer un **code clair, commenté et maintenable**, en res
 
 ---
 
-## 🔧 Installation & utilisation
-
-1. **Cloner le dépôt**
-   ```bash
-   git clone https://github.com/<ton-utilisateur>/<nom-du-repo>.git
-````
-
-2. **Ouvrir le projet**
-
-   - Ouvrir `index.html` directement dans ton navigateur
-     _(ou via une extension comme “Live Server” sur VS Code)_
-
-3. **Modifier le contenu**
-
-   - Remplacer les textes et images dans `index.html`
-   - Personnaliser les styles dans `style.css`
-   - Adapter les effets dans `index.js`
-
----
-
-## 🧠 Améliorations futures
-
-- 🌗 Thème clair/sombre automatique
-- 🧩 Intégration d’un blog technique ou section "Actualités"
-- 💬 Formulaire de contact dynamique avec API (Node.js ou PHP)
-- ⚡ Optimisation du chargement et des images (lazy loading)
-
----
-
 ## 👤 Auteur
 
 **Titouan**
@@ -115,24 +85,11 @@ Mon objectif est de proposer un **code clair, commenté et maintenable**, en res
 
 📫 Contact :
 
-- [LinkedIn](https://linkedin.com/in/...)
-- [GitHub](https://github.com/...)
-- ✉️ [titouan@example.com](mailto:titouan@example.com) _(à remplacer)_
+- [LinkedIn](https://www.linkedin.com/in/titouan-conquere-de-monbrison)
+- [GitHub](https://github.com/Sh3tys)
+- ✉️ [titouan.conquere-de-monbrison@efrei.net](mailto:titouan.conquere-de-monbrison@efrei.net)
 
----
-
-## 🪪 Licence
-
-Ce projet est publié sous licence **MIT** — libre d’utilisation, de modification et de partage avec attribution.
-
----
-
-> “Un code propre, c’est une idée claire traduite dans un langage que les autres peuvent comprendre.”
-
+--
+Merci de visiter mon portfolio ! N’hésitez pas à me contacter pour toute opportunité ou collaboration.
 ```
-
----
-
-Souhaites-tu que je t’en fasse une **version prête à copier-coller en Markdown** avec tes vrais liens (GitHub, LinkedIn, etc.) ?
-Tu peux me les donner et je te le formate proprement.
-```
+````
