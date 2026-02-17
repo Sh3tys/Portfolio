@@ -9,14 +9,27 @@ import { Shield, Lock, User } from 'lucide-react';
 export default function LoginPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [honeypot, setHoneypot] = useState(''); // Bot trap
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Bot Detection: If honeypot is filled, it's a bot
+    if (honeypot) {
+      console.warn('BOT_DETECTION_TRIGGERED: SHADOW_TRAP_ACTIVE');
+      // Silently fail to confuse the bot
+      setError('Access forbidden by security protocol.');
+      return;
+    }
+
     setLoading(true);
     setError('');
+
+    // Tactical Delay: Slow down brute-force attempts
+    await new Promise(r => setTimeout(r, 1000));
 
     const result = await signIn('credentials', {
       username,
@@ -44,6 +57,17 @@ export default function LoginPage() {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Honeypot field - hidden from humans */}
+          <div className="hidden" aria-hidden="true">
+            <input 
+              type="text" 
+              name="security_trap" 
+              value={honeypot} 
+              onChange={(e) => setHoneypot(e.target.value)} 
+              tabIndex={-1} 
+              autoComplete="off" 
+            />
+          </div>
           <div className="space-y-2">
             <label className="text-xs font-mono uppercase text-primary/60 ml-1">Identity_ID</label>
             <div className="relative">

@@ -10,14 +10,39 @@ export interface ActionResponse {
   error?: string;
 }
 
-// Helper to sanitize MongoDB objects for Next.js Client Components
+// Enhanced security sanitization system
 function sanitize(obj: any) {
   if (!obj) return null;
-  const serialized = JSON.parse(JSON.stringify(obj));
-  if (serialized._id) {
-    serialized.id = serialized._id;
+  
+  // Prevent NoSQL Injection and sanitize all strings
+  const processValue = (val: any): any => {
+    if (typeof val === 'string') {
+      // Remove HTML tags to prevent XSS
+      return val.replace(/<[^>]*>?/gm, '').trim();
+    }
+    if (Array.isArray(val)) {
+      return val.map(processValue);
+    }
+    if (typeof val === 'object' && val !== null) {
+      const sanitizedObj: any = {};
+      for (const [key, value] of Object.entries(val)) {
+        // Prevent reserved MongoDB keys ($ and .)
+        if (!key.startsWith('$') && !key.includes('.')) {
+          sanitizedObj[key] = processValue(value);
+        }
+      }
+      return sanitizedObj;
+    }
+    return val;
+  };
+
+  const cleanData = processValue(obj);
+  
+  // Map MongoDB _id to standard id for client
+  if (cleanData._id) {
+    cleanData.id = cleanData._id.toString();
   }
-  return serialized;
+  return cleanData;
 }
 
 // --- Projects CRUD ---
