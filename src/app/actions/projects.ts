@@ -4,11 +4,16 @@ import { getDb } from '@/lib/mongodb';
 import { revalidatePath } from 'next/cache';
 import { ObjectId } from 'mongodb';
 
+export interface ActionResponse {
+  success: boolean;
+  id?: string;
+  error?: string;
+}
+
 // Helper to sanitize MongoDB objects for Next.js Client Components
 function sanitize(obj: any) {
   if (!obj) return null;
   const serialized = JSON.parse(JSON.stringify(obj));
-  // Ensure we have a string 'id' for easier frontend usage
   if (serialized._id) {
     serialized.id = serialized._id;
   }
@@ -17,13 +22,13 @@ function sanitize(obj: any) {
 
 // --- Projects CRUD ---
 
-export async function getProjects() {
+export async function getProjects(): Promise<any[]> {
   const db = await getDb();
   const projects = await db.collection('projects').find({}).sort({ createdAt: -1 }).toArray();
-  return projects.map(p => sanitize(p));
+  return projects.map((p: any) => sanitize(p));
 }
 
-export async function createProject(formData: any) {
+export async function createProject(formData: any): Promise<ActionResponse> {
   try {
     const db = await getDb();
     const result = await db.collection('projects').insertOne({
@@ -39,7 +44,7 @@ export async function createProject(formData: any) {
   }
 }
 
-export async function updateProject(id: string, formData: any) {
+export async function updateProject(id: string, formData: any): Promise<ActionResponse> {
   try {
     const db = await getDb();
     const { id: _, _id, ...updateData } = formData;
@@ -56,23 +61,28 @@ export async function updateProject(id: string, formData: any) {
   }
 }
 
-export async function deleteProject(id: string) {
-  const db = await getDb();
-  await db.collection('projects').deleteOne({ _id: new ObjectId(id) });
-  revalidatePath('/');
-  revalidatePath('/admin/dashboard');
-  return { success: true };
+export async function deleteProject(id: string): Promise<ActionResponse> {
+  try {
+    const db = await getDb();
+    await db.collection('projects').deleteOne({ _id: new ObjectId(id) });
+    revalidatePath('/');
+    revalidatePath('/admin/dashboard');
+    return { success: true };
+  } catch (error: any) {
+    console.error('Delete Project Error:', error);
+    return { success: false, error: error.message };
+  }
 }
 
 // --- Skills CRUD ---
 
-export async function getSkills() {
+export async function getSkills(): Promise<any[]> {
   const db = await getDb();
   const skills = await db.collection('skills').find({}).toArray();
-  return skills.map(s => sanitize(s));
+  return skills.map((s: any) => sanitize(s));
 }
 
-export async function updateSkillCategory(id: string, category: any) {
+export async function updateSkillCategory(id: string, category: any): Promise<ActionResponse> {
   try {
     const db = await getDb();
     const { id: _, _id, ...updateData } = category;
@@ -91,13 +101,13 @@ export async function updateSkillCategory(id: string, category: any) {
 
 // --- Site Content CRUD ---
 
-export async function getSiteContent() {
+export async function getSiteContent(): Promise<any> {
   const db = await getDb();
   const content = await db.collection('content').findOne({ type: 'global' });
   return sanitize(content);
 }
 
-export async function updateSiteContent(content: any) {
+export async function updateSiteContent(content: any): Promise<ActionResponse> {
   try {
     const db = await getDb();
     const { _id, ...updateData } = content;
