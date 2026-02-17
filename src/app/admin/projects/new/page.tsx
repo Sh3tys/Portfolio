@@ -22,12 +22,12 @@ export default function NewProject() {
     e.preventDefault();
     setLoading(true);
     
-    const result = await createProject(formData);
+    const result = await createProject(formData) as any;
     
     if (result.success) {
       router.push('/admin/dashboard');
     } else {
-      alert('Error: ' + result.error);
+      alert('Error: ' + (result.error || 'Unknown error'));
       setLoading(false);
     }
   };

@@ -24,26 +24,36 @@ export async function getProjects() {
 }
 
 export async function createProject(formData: any) {
-  const db = await getDb();
-  const result = await db.collection('projects').insertOne({
-    ...formData,
-    createdAt: new Date(),
-  });
-  revalidatePath('/');
-  revalidatePath('/admin/dashboard');
-  return { success: true, id: result.insertedId.toString() };
+  try {
+    const db = await getDb();
+    const result = await db.collection('projects').insertOne({
+      ...formData,
+      createdAt: new Date(),
+    });
+    revalidatePath('/');
+    revalidatePath('/admin/dashboard');
+    return { success: true, id: result.insertedId.toString() };
+  } catch (error: any) {
+    console.error('Create Project Error:', error);
+    return { success: false, error: error.message || 'Unknown database error' };
+  }
 }
 
 export async function updateProject(id: string, formData: any) {
-  const db = await getDb();
-  const { id: _, _id, ...updateData } = formData;
-  await db.collection('projects').updateOne(
-    { _id: new ObjectId(id) },
-    { $set: updateData }
-  );
-  revalidatePath('/');
-  revalidatePath('/admin/dashboard');
-  return { success: true };
+  try {
+    const db = await getDb();
+    const { id: _, _id, ...updateData } = formData;
+    await db.collection('projects').updateOne(
+      { _id: new ObjectId(id) },
+      { $set: updateData }
+    );
+    revalidatePath('/');
+    revalidatePath('/admin/dashboard');
+    return { success: true };
+  } catch (error: any) {
+    console.error('Update Project Error:', error);
+    return { success: false, error: error.message };
+  }
 }
 
 export async function deleteProject(id: string) {
@@ -63,15 +73,20 @@ export async function getSkills() {
 }
 
 export async function updateSkillCategory(id: string, category: any) {
-  const db = await getDb();
-  const { id: _, _id, ...updateData } = category;
-  await db.collection('skills').updateOne(
-    { _id: new ObjectId(id) },
-    { $set: updateData }
-  );
-  revalidatePath('/');
-  revalidatePath('/admin/dashboard');
-  return { success: true };
+  try {
+    const db = await getDb();
+    const { id: _, _id, ...updateData } = category;
+    await db.collection('skills').updateOne(
+      { _id: new ObjectId(id) },
+      { $set: updateData }
+    );
+    revalidatePath('/');
+    revalidatePath('/admin/dashboard');
+    return { success: true };
+  } catch (error: any) {
+    console.error('Update Skill Error:', error);
+    return { success: false, error: error.message };
+  }
 }
 
 // --- Site Content CRUD ---
@@ -83,14 +98,19 @@ export async function getSiteContent() {
 }
 
 export async function updateSiteContent(content: any) {
-  const db = await getDb();
-  const { _id, ...updateData } = content;
-  await db.collection('content').updateOne(
-    { type: 'global' },
-    { $set: updateData },
-    { upsert: true }
-  );
-  revalidatePath('/');
-  revalidatePath('/admin/dashboard');
-  return { success: true };
+  try {
+    const db = await getDb();
+    const { _id, ...updateData } = content;
+    await db.collection('content').updateOne(
+      { type: 'global' },
+      { $set: updateData },
+      { upsert: true }
+    );
+    revalidatePath('/');
+    revalidatePath('/admin/dashboard');
+    return { success: true };
+  } catch (error: any) {
+    console.error('Update Content Error:', error);
+    return { success: false, error: error.message };
+  }
 }
