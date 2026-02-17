@@ -15,7 +15,8 @@ import {
   createProject
 } from '@/app/actions/projects';
 import { uploadFile } from '@/app/actions/upload';
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
+import { Notification, NotificationType } from '@/components/ui/Notification';
 
 interface Project {
   id: string;
@@ -78,12 +79,34 @@ export default function DashboardClient({
 
   const projectImageInputRef = useRef<HTMLInputElement>(null);
 
+  const [notification, setNotification] = useState<{
+    isOpen: boolean;
+    message: string;
+    type: NotificationType;
+  }>({
+    isOpen: false,
+    message: '',
+    type: 'success',
+  });
+
+  const showNotification = (message: string, type: NotificationType) => {
+    setNotification({ isOpen: true, message, type });
+  };
+
   // Handlers
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>, type: 'image' | 'cv' | 'project') => {
     const file = event.target.files?.[0];
     if (!file) return;
 
+    // Check file size (max 4MB for server actions)
+    if (file.size > 4 * 1024 * 1024) {
+      showNotification('FILE_LIMIT_EXCEEDED: MAX 4MB REQUIRED', 'error');
+      return;
+    }
+
     setIsSaving(true);
+    showNotification('UPLOADING_ASSETS...', 'loading');
+    
     try {
       const formData = new FormData();
       formData.append('file', file);
@@ -105,9 +128,10 @@ export default function DashboardClient({
           image: res.url
         });
       }
+      showNotification('UPLOAD_COMPLETE: ASSET_STREAM_STABLE', 'success');
     } catch (error) {
       console.error('Upload failed:', error);
-      alert('Upload failed. Check terminal for logs.');
+      showNotification('UPLOAD_FAILED: PROTOCOL_CORRUPTION', 'error');
     } finally {
       setIsSaving(false);
     }
@@ -119,31 +143,58 @@ export default function DashboardClient({
 
   const handleSaveProject = async () => {
     setIsSaving(true);
-    await updateProject(editingProjectId!, projectForm);
-    setProjects(projects.map(p => p.id === editingProjectId ? { ...p, ...projectForm } as Project : p));
-    setEditingProjectId(null);
-    setIsSaving(false);
+    showNotification('SYNCING_DATABASE...', 'loading');
+    try {
+      await updateProject(editingProjectId!, projectForm);
+      setProjects(projects.map(p => p.id === editingProjectId ? { ...p, ...projectForm } as Project : p));
+      setEditingProjectId(null);
+      showNotification('MISSION_UPDATED: DATA_INTEGRITY_VERIFIED', 'success');
+    } catch (error) {
+      showNotification('SYNC_FAILED: ACCESS_DENIED', 'error');
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const handleSaveSkill = async () => {
     setIsSaving(true);
-    await updateSkillCategory(editingSkillId!, skillForm);
-    setSkills(skills.map(s => s.id === editingSkillId ? { ...s, ...skillForm } as SkillCategory : s));
-    setEditingSkillId(null);
-    setIsSaving(false);
+    showNotification('SYNCING_STACK...', 'loading');
+    try {
+      await updateSkillCategory(editingSkillId!, skillForm);
+      setSkills(skills.map(s => s.id === editingSkillId ? { ...s, ...skillForm } as SkillCategory : s));
+      setEditingSkillId(null);
+      showNotification('STACK_UPDATED: ARSENAL_STABLE', 'success');
+    } catch (error) {
+      showNotification('SYNC_FAILED: PROTOCOL_ERROR', 'error');
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const handleSaveContent = async () => {
     setIsSaving(true);
-    await updateSiteContent(content);
-    setIsSaving(false);
-    alert('Deployment successful: Origin nodes updated.');
+    showNotification('COMMITTING_CHANGES...', 'loading');
+    try {
+      await updateSiteContent(content);
+      showNotification('DEPLOYMENT_SUCCESSFUL: ORIGIN_NODES_UPDATED', 'success');
+    } catch (error) {
+      showNotification('DEPLOYMENT_FAILED: SIGNAL_LOST', 'error');
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const handleDeleteProject = async (id: string) => {
-    if (confirm('Are you sure you want to remove this mission from the terminal?')) {
+    setIsSaving(true);
+    showNotification('PURGING_ENTRY...', 'loading');
+    try {
       await deleteProject(id);
       setProjects(projects.filter(p => p.id !== id));
+      showNotification('ENTRY_PURGED: DATA_VOIDED', 'success');
+    } catch (error) {
+      showNotification('PURGE_FAILED: ENTRY_PROTECTED', 'error');
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -402,6 +453,11 @@ export default function DashboardClient({
           </div>
         )}
       </div>
+
+      <Notification 
+        {...notification} 
+        onClose={() => setNotification({ ...notification, isOpen: false })} 
+      />
     </div>
   );
 }
