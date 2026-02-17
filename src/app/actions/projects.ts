@@ -23,9 +23,14 @@ function sanitize(obj: any) {
 // --- Projects CRUD ---
 
 export async function getProjects(): Promise<any[]> {
-  const db = await getDb();
-  const projects = await db.collection('projects').find({}).sort({ createdAt: -1 }).toArray();
-  return projects.map((p: any) => sanitize(p));
+  try {
+    const db = await getDb();
+    const projects = await db.collection('projects').find({}).sort({ createdAt: -1 }).toArray();
+    return projects.map((p: any) => sanitize(p));
+  } catch (error) {
+    console.error('getProjects error:', error);
+    return [];
+  }
 }
 
 export async function createProject(formData: any): Promise<ActionResponse> {
@@ -77,9 +82,14 @@ export async function deleteProject(id: string): Promise<ActionResponse> {
 // --- Skills CRUD ---
 
 export async function getSkills(): Promise<any[]> {
-  const db = await getDb();
-  const skills = await db.collection('skills').find({}).toArray();
-  return skills.map((s: any) => sanitize(s));
+  try {
+    const db = await getDb();
+    const skills = await db.collection('skills').find({}).toArray();
+    return skills.map((s: any) => sanitize(s));
+  } catch (error) {
+    console.error('getSkills error:', error);
+    return [];
+  }
 }
 
 export async function updateSkillCategory(id: string, category: any): Promise<ActionResponse> {
@@ -102,9 +112,14 @@ export async function updateSkillCategory(id: string, category: any): Promise<Ac
 // --- Site Content CRUD ---
 
 export async function getSiteContent(): Promise<any> {
-  const db = await getDb();
-  const content = await db.collection('content').findOne({ type: 'global' });
-  return sanitize(content);
+  try {
+    const db = await getDb();
+    const content = await db.collection('content').findOne({ type: 'global' });
+    return sanitize(content);
+  } catch (error) {
+    console.error('getSiteContent error:', error);
+    return null;
+  }
 }
 
 export async function updateSiteContent(content: any): Promise<ActionResponse> {
