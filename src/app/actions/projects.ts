@@ -52,7 +52,7 @@ export async function createProject(formData: any): Promise<ActionResponse> {
 export async function updateProject(id: string, formData: any): Promise<ActionResponse> {
   try {
     const db = await getDb();
-    const { id: _, _id, ...updateData } = formData;
+    const { id: removeId, _id: removeOid, ...updateData } = formData;
     await db.collection('projects').updateOne(
       { _id: new ObjectId(id) },
       { $set: updateData }
@@ -95,7 +95,7 @@ export async function getSkills(): Promise<any[]> {
 export async function updateSkillCategory(id: string, category: any): Promise<ActionResponse> {
   try {
     const db = await getDb();
-    const { id: _, _id, ...updateData } = category;
+    const { id: removeId, _id: removeOid, ...updateData } = category;
     await db.collection('skills').updateOne(
       { _id: new ObjectId(id) },
       { $set: updateData }
@@ -112,30 +112,46 @@ export async function updateSkillCategory(id: string, category: any): Promise<Ac
 // --- Site Content CRUD ---
 
 export async function getSiteContent(): Promise<any> {
+  console.log('[DB] FETCHING_SITE_CONTENT...');
   try {
     const db = await getDb();
     const content = await db.collection('content').findOne({ type: 'global' });
+    if (!content) {
+      console.warn('[DB] SITE_CONTENT_MISSING: Returning null');
+      return null;
+    }
+    console.log('[DB] SITE_CONTENT_RETRIEVED: Found document');
     return sanitize(content);
-  } catch (error) {
-    console.error('getSiteContent error:', error);
+  } catch (error: any) {
+    console.error('[DB] FETCH_CONTENT_ERROR:', error);
     return null;
   }
 }
 
 export async function updateSiteContent(content: any): Promise<ActionResponse> {
+  console.log('[DB] UPDATING_SITE_CONTENT...');
   try {
     const db = await getDb();
-    const { _id, ...updateData } = content;
-    await db.collection('content').updateOne(
+    // Destructure to remove MongoDB internal fields that cause update errors
+    const { _id, id, ...updateData } = content;
+    
+    // Log content size to debug payload issues
+    const sizeInMB = Buffer.byteLength(JSON.stringify(updateData)) / (1024 * 1024);
+    console.log(`[DB] PAYLOAD_SIZE: ${sizeInMB.toFixed(2)} MB`);
+
+    const result = await db.collection('content').updateOne(
       { type: 'global' },
       { $set: updateData },
       { upsert: true }
     );
+    
+    console.log('[DB] UPDATE_SUCCESS:', result.modifiedCount, 'modified,', result.upsertedCount, 'upserted');
+    
     revalidatePath('/');
     revalidatePath('/admin/dashboard');
     return { success: true };
   } catch (error: any) {
-    console.error('Update Content Error:', error);
-    return { success: false, error: error.message };
+    console.error('[DB] UPDATE_CONTENT_ERROR:', error);
+    return { success: false, error: error.message || 'DATABASE_STREAM_FAILURE' };
   }
 }

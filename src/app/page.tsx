@@ -53,11 +53,10 @@ export default async function Home() {
                   {/* Image Placeholder or Actual Image */}
                   <div className="aspect-video relative overflow-hidden bg-white/5">
                     {project.image ? (
-                      <Image 
+                      <img 
                         src={project.image} 
                         alt={project.title} 
-                        fill 
-                        className="object-cover transition-transform duration-700 group-hover:scale-110"
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                       />
                     ) : (
                       <div className="absolute inset-0 flex items-center justify-center">
@@ -107,33 +106,47 @@ export default async function Home() {
       {/* About Section */}
       <section id="about" className="py-24 relative z-10">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div className="relative">
-              <div className="aspect-square glass rounded-sm border border-white/10 flex items-center justify-center p-8 relative overflow-hidden group">
-                 <div className="absolute inset-0 bg-primary/5 group-hover:bg-primary/10 transition-colors" />
-                 <div className="relative text-center">
-                    <div className="text-8xl font-bold tracking-tighter text-white/5 absolute -top-10 -left-10 select-none">ORIGIN</div>
-                    <div className="w-32 h-32 rounded-full border-2 border-dashed border-primary/30 flex items-center justify-center mb-6 animate-spin-slow">
-                       {content.origin.image ? (
-                         <div className="w-24 h-24 rounded-full bg-primary/20 flex items-center justify-center overflow-hidden border border-primary/40 relative">
-                           <Image 
-                             src={content.origin.image} 
-                             alt={content.origin.operatorName}
-                             fill
-                             className="object-cover"
-                           />
-                         </div>
-                       ) : (
-                         <Shield className="w-12 h-12 text-primary" />
-                       )}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
+            <div className="relative group mx-auto lg:mx-0">
+              {/* Massive Outer HUD Ring */}
+              <div className="w-[300px] h-[300px] md:w-[400px] md:h-[400px] relative flex items-center justify-center">
+                {/* Rotating HUD Layers */}
+                <div className="absolute inset-0 rounded-full border border-primary/10 animate-[spin_20s_linear_infinite]" />
+                <div className="absolute inset-4 rounded-full border border-dashed border-primary/20 animate-[spin_15s_linear_infinite_reverse]" />
+                <div className="absolute inset-8 rounded-full border-2 border-primary/5 animate-[pulse_4s_ease-in-out_infinite]" />
+                
+                {/* Image Container */}
+                <div className="w-[260px] h-[260px] md:w-[320px] md:h-[320px] rounded-full overflow-hidden relative z-10 border-2 border-primary/40 shadow-[0_0_60px_rgba(0,242,255,0.15)]">
+                  {content.origin.image ? (
+                    <img 
+                      src={content.origin.image} 
+                      alt={content.origin.operatorName}
+                      className="w-full h-full object-cover scale-100 group-hover:scale-110 transition-transform duration-1000"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-black/50 flex items-center justify-center">
+                      <Shield className="w-24 h-24 text-primary" />
                     </div>
-                    <h3 className="text-2xl font-bold italic tracking-widest uppercase">{content.origin.operatorName}</h3>
-                    <p className="text-xs font-mono text-primary/60 uppercase mt-2 Tracking-widest">Protocol: {content.origin.protocol}</p>
-                 </div>
+                  )}
+                  
+                  {/* Digital Scanning Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-b from-primary/10 via-transparent to-primary/10 pointer-events-none mix-blend-overlay opacity-30" />
+                  <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_2px,3px_100%] pointer-events-none opacity-20" />
+                </div>
+
+                {/* Decorative Digital Elements (Corners/Markers) */}
+                <div className="absolute -top-2 -left-2 w-10 h-10 border-t-2 border-l-2 border-primary/60 glow-primary" />
+                <div className="absolute -bottom-2 -right-2 w-10 h-10 border-b-2 border-r-2 border-primary/60 glow-primary" />
+                
+                {/* Data Readouts - Moved to LEFT to avoid overlapping text column */}
+                <div className="absolute -left-12 top-1/4 hidden md:block">
+                  <div className="font-mono text-[8px] text-primary space-y-1 bg-black/40 p-2 border-l border-primary/40">
+                    <p>BIO_RECOGNITION: OK</p>
+                    <p>ID: {content.origin.operatorName}</p>
+                    <p>STATUS: ACTIVE</p>
+                  </div>
+                </div>
               </div>
-              {/* Decorative corners */}
-              <div className="absolute -top-2 -left-2 w-8 h-8 border-t-2 border-l-2 border-primary/40" />
-              <div className="absolute -bottom-2 -right-2 w-8 h-8 border-b-2 border-r-2 border-primary/40" />
             </div>
 
             <div className="space-y-8">

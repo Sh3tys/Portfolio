@@ -79,6 +79,40 @@ export default function DashboardClient({
 
   const projectImageInputRef = useRef<HTMLInputElement>(null);
 
+  // Helper function to resize/compress images before upload
+  const resizeImage = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (event) => {
+        const img = new Image();
+        img.src = event.target?.result as string;
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          let width = img.width;
+          let height = img.height;
+          const maxDimension = 1200;
+
+          if (width > height && width > maxDimension) {
+            height = (height * maxDimension) / width;
+            width = maxDimension;
+          } else if (height > maxDimension) {
+            width = (width * maxDimension) / height;
+            height = maxDimension;
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx?.drawImage(img, 0, 0, width, height);
+          resolve(canvas.toDataURL('image/jpeg', 0.8));
+        };
+        img.onerror = reject;
+      };
+      reader.onerror = reject;
+    });
+  };
+
   const [notification, setNotification] = useState<{
     isOpen: boolean;
     message: string;
@@ -98,39 +132,41 @@ export default function DashboardClient({
     const file = event.target.files?.[0];
     if (!file) return;
 
-    // Check file size (max 4MB for server actions)
-    if (file.size > 4 * 1024 * 1024) {
-      showNotification('FILE_LIMIT_EXCEEDED: MAX 4MB REQUIRED', 'error');
-      return;
-    }
-
     setIsSaving(true);
     showNotification('UPLOADING_ASSETS...', 'loading');
     
     try {
-      const formData = new FormData();
-      formData.append('file', file);
-      const res = await uploadFile(formData);
+      let finalUrl = '';
+      
+      if (type === 'image' || type === 'project') {
+        showNotification('OPTIMIZING_IMAGE...', 'loading');
+        finalUrl = await resizeImage(file);
+      } else {
+        const formData = new FormData();
+        formData.append('file', file);
+        const res = await uploadFile(formData);
+        finalUrl = res.url;
+      }
 
       if (type === 'image') {
         setContent({ 
           ...content, 
-          origin: { ...content.origin, image: res.url } 
+          origin: { ...content.origin, image: finalUrl } 
         });
       } else if (type === 'cv') {
         setContent({ 
           ...content, 
-          contact: { ...content.contact, cvUrl: res.url } 
+          contact: { ...content.contact, cvUrl: finalUrl } 
         });
       } else if (type === 'project') {
         setProjectForm({
           ...projectForm,
-          image: res.url
+          image: finalUrl
         });
       }
       showNotification('UPLOAD_COMPLETE: ASSET_STREAM_STABLE', 'success');
     } catch (error) {
-      console.error('Upload failed:', error);
+      console.error('[UPLOAD_ERROR]', error);
       showNotification('UPLOAD_FAILED: PROTOCOL_CORRUPTION', 'error');
     } finally {
       setIsSaving(false);
@@ -145,11 +181,16 @@ export default function DashboardClient({
     setIsSaving(true);
     showNotification('SYNCING_DATABASE...', 'loading');
     try {
-      await updateProject(editingProjectId!, projectForm);
-      setProjects(projects.map(p => p.id === editingProjectId ? { ...p, ...projectForm } as Project : p));
-      setEditingProjectId(null);
-      showNotification('MISSION_UPDATED: DATA_INTEGRITY_VERIFIED', 'success');
+      const res = await updateProject(editingProjectId!, projectForm);
+      if (res.success) {
+        setProjects(projects.map(p => p.id === editingProjectId ? { ...p, ...projectForm } as Project : p));
+        setEditingProjectId(null);
+        showNotification('MISSION_UPDATED: DATA_INTEGRITY_VERIFIED', 'success');
+      } else {
+        showNotification(`SYNC_FAILED: ${res.error || 'ACCESS_DENIED'}`, 'error');
+      }
     } catch (error) {
+      console.error('[PROJECT_SAVE_ERROR]', error);
       showNotification('SYNC_FAILED: ACCESS_DENIED', 'error');
     } finally {
       setIsSaving(false);
@@ -160,11 +201,16 @@ export default function DashboardClient({
     setIsSaving(true);
     showNotification('SYNCING_STACK...', 'loading');
     try {
-      await updateSkillCategory(editingSkillId!, skillForm);
-      setSkills(skills.map(s => s.id === editingSkillId ? { ...s, ...skillForm } as SkillCategory : s));
-      setEditingSkillId(null);
-      showNotification('STACK_UPDATED: ARSENAL_STABLE', 'success');
+      const res = await updateSkillCategory(editingSkillId!, skillForm);
+      if (res.success) {
+        setSkills(skills.map(s => s.id === editingSkillId ? { ...s, ...skillForm } as SkillCategory : s));
+        setEditingSkillId(null);
+        showNotification('STACK_UPDATED: ARSENAL_STABLE', 'success');
+      } else {
+        showNotification(`SYNC_FAILED: ${res.error || 'PROTOCOL_ERROR'}`, 'error');
+      }
     } catch (error) {
+      console.error('[SKILL_SAVE_ERROR]', error);
       showNotification('SYNC_FAILED: PROTOCOL_ERROR', 'error');
     } finally {
       setIsSaving(false);
@@ -175,9 +221,14 @@ export default function DashboardClient({
     setIsSaving(true);
     showNotification('COMMITTING_CHANGES...', 'loading');
     try {
-      await updateSiteContent(content);
-      showNotification('DEPLOYMENT_SUCCESSFUL: ORIGIN_NODES_UPDATED', 'success');
+      const res = await updateSiteContent(content);
+      if (res.success) {
+        showNotification('DEPLOYMENT_SUCCESSFUL: ORIGIN_NODES_UPDATED', 'success');
+      } else {
+        showNotification(`DEPLOYMENT_FAILED: ${res.error || 'SIGNAL_LOST'}`, 'error');
+      }
     } catch (error) {
+      console.error('[CONTENT_DEPLOY_ERROR]', error);
       showNotification('DEPLOYMENT_FAILED: SIGNAL_LOST', 'error');
     } finally {
       setIsSaving(false);
@@ -347,33 +398,53 @@ export default function DashboardClient({
             <div className="glass p-8 space-y-8 border border-white/5">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="space-y-4">
-                  <div className="aspect-square bg-white/5 border border-dashed border-white/10 rounded-sm flex flex-col items-center justify-center group relative overflow-hidden">
-                    {content.origin.image ? (
-                      <div className="text-center p-4 w-full h-full relative">
-                         <img 
-                           src={content.origin.image} 
-                           alt="Profile" 
-                           className="w-full h-full object-cover rounded-sm opacity-50 group-hover:opacity-100 transition-opacity"
-                         />
-                         <div className="absolute bottom-4 left-0 right-0">
-                            <p className="text-[10px] font-mono text-white/80 uppercase bg-black/40 backdrop-blur-sm py-1 px-2 inline-block">FACE_SCAN_ACTIVE</p>
-                         </div>
-                      </div>
-                    ) : (
-                      <ImageIcon className="w-12 h-12 text-white/10 group-hover:text-primary transition-colors" />
-                    )}
-                    <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
-                       <input 
-                         type="file" 
-                         ref={profileInputRef} 
-                         className="hidden" 
-                         accept="image/*"
-                         onChange={(e) => handleFileUpload(e, 'image')}
-                       />
-                       <Button size="sm" onClick={() => profileInputRef.current?.click()}>UPLOAD_IMAGE</Button>
+                  <div className="w-[300px] h-[300px] md:w-[380px] md:h-[380px] relative flex items-center justify-center mx-auto group">
+                    {/* HUD Rings (Matching page.tsx) */}
+                    <div className="absolute inset-0 rounded-full border border-primary/20 animate-[spin_20s_linear_infinite]" />
+                    <div className="absolute inset-4 rounded-full border border-dashed border-primary/30 animate-[spin_15s_linear_infinite_reverse]" />
+                    
+                    {/* Preview Container */}
+                    <div className="w-[260px] h-[260px] md:w-[320px] md:h-[320px] rounded-full overflow-hidden relative z-10 border-2 border-primary/40 bg-black/50 shadow-[0_0_40px_rgba(0,242,255,0.1)]">
+                      {content.origin.image ? (
+                        <div className="w-full h-full relative">
+                           <img 
+                             src={content.origin.image} 
+                             alt="Profile" 
+                             className="w-full h-full object-cover scale-100 group-hover:scale-105 transition-transform duration-700"
+                           />
+                           {/* Overlay when hovering */}
+                           <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center transition-all duration-300 z-20">
+                              <p className="font-mono text-[10px] text-primary mb-4 uppercase tracking-widest">Update_Signal</p>
+                              <Button size="sm" onClick={() => profileInputRef.current?.click()}>INJECT_NEW_ASSET</Button>
+                           </div>
+                           
+                           {/* Scanning Line HUD Effect */}
+                           <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(rgba(0,242,255,0.05)_50%,rgba(0,0,0,0.1)_50%)] bg-[length:100%_4px] animate-pulse" />
+                        </div>
+                      ) : (
+                        <div className="w-full h-full flex flex-col items-center justify-center p-8 text-center">
+                          <ImageIcon className="w-16 h-16 text-white/10 mb-4" />
+                          <Button size="sm" onClick={() => profileInputRef.current?.click()}>UPLOAD_DATA</Button>
+                        </div>
+                      )}
                     </div>
+
+                    {/* Corner Markers */}
+                    <div className="absolute top-0 left-0 w-8 h-8 border-t border-l border-primary/50" />
+                    <div className="absolute bottom-0 right-0 w-8 h-8 border-b border-r border-primary/50" />
+                    
+                    <input 
+                      type="file" 
+                      ref={profileInputRef} 
+                      className="hidden" 
+                      accept="image/*"
+                      onChange={(e) => handleFileUpload(e, 'image')}
+                    />
                   </div>
-                  <input className="w-full bg-black/50 border border-white/10 p-3 font-mono text-xs text-primary outline-none" placeholder="NAME" value={content.origin.operatorName} onChange={e => setContent({...content, origin: {...content.origin, operatorName: e.target.value}})} />
+                  <div className="max-w-[380px] mx-auto text-center">
+                    <p className="text-[10px] font-mono text-primary/40 uppercase mb-4 italic">// ACTIVE_IDENTITY_PREVIEW_v4.2</p>
+                    <input className="w-full bg-black/50 border border-white/10 p-4 font-mono text-sm text-primary outline-none text-center rounded-sm focus:border-primary/50 transition-colors" placeholder="OPERATOR_NAME" value={content.origin.operatorName} onChange={e => setContent({...content, origin: {...content.origin, operatorName: e.target.value}})} />
+                  </div>
                 </div>
                 <div className="space-y-6">
                    <div className="space-y-2">
