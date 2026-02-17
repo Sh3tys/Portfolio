@@ -1,36 +1,49 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🛸 0X_SHETYS // NEURAL_INTERFACE
 
-## Getting Started
+Welcome to the digital origin point. This is my personal, high-performance portfolio engineered with a futuristic, cyberpunk aesthetic. 
 
-First, run the development server:
+**Note: This project is a private repository and is not intended for public distribution or cloning. All logic and designs are proprietary.**
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## ⚡ CORE_SPECS
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Framework**: Next.js 14 (App Router)
+- **Engine**: TypeScript & React
+- **Dynamics**: Framer Motion & Lucide Icons
+- **Brain**: MongoDB Atlas (Full CRUD Persistence)
+- **Auth**: NextAuth.js (Root Access Only)
+- **Neural Link**: Vercel Deployment
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🛠️ MISSION_MODULES
 
-## Learn More
+### 1. ACTIVE_MISSIONS (Projects)
+A curated archive of high-level project deployments with dynamic tags and real-time database fetching.
 
-To learn more about Next.js, take a look at the following resources:
+### 2. TECHNICAL_STACK (Skills)
+Categorized competency modules covering Frontend engineering, Backend architectures, and Core protocols.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 3. MISSION_ORIGIN (Identity)
+Biographic data stream including XP levels, success rates, and operator background synchronized with the cloud.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 4. ESTABLISH_SIGNAL (Communication)
+Secure communication protocols featuring live asset management for my CV and signal channels (Discord, X).
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🔐 CONTROL_CENTER
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The project includes a custom-built **Admin Dashboard** (Mission Control) allowing for live site modifications without code changes:
+- Secure **Root Login** via encrypted protocols.
+- **Base64 Asset Stream**: Direct image and document uploads stored inside MongoDB for 100% Vercel compatibility.
+- **Deployment Hub**: Instant propagation of site parameters to origin nodes.
+
+---
+
+## 📜 LEGAL_NOTICE
+
+Copyright © 2026 **Shetys**. All rights reserved. 
+Unauthorized copying of this project via any medium is strictly prohibited. This is an experimental personal interface.
+
+---
+`STATUS: SYSTEM_ON_LINE // ENCRYPTION_ACTIVE`
