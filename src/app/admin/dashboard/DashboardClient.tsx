@@ -119,7 +119,7 @@ export default function DashboardClient({
 
   const handleSaveProject = async () => {
     setIsSaving(true);
-    await updateProject(editingProjectId!, projectForm);
+    await updateProject(editingProjectId!, projectForm) as any;
     setProjects(projects.map(p => p.id === editingProjectId ? { ...p, ...projectForm } as Project : p));
     setEditingProjectId(null);
     setIsSaving(false);
@@ -127,7 +127,7 @@ export default function DashboardClient({
 
   const handleSaveSkill = async () => {
     setIsSaving(true);
-    await updateSkillCategory(editingSkillId!, skillForm);
+    await updateSkillCategory(editingSkillId!, skillForm) as any;
     setSkills(skills.map(s => s.id === editingSkillId ? { ...s, ...skillForm } as SkillCategory : s));
     setEditingSkillId(null);
     setIsSaving(false);
@@ -135,7 +135,7 @@ export default function DashboardClient({
 
   const handleSaveContent = async () => {
     setIsSaving(true);
-    await updateSiteContent(content);
+    await updateSiteContent(content) as any;
     setIsSaving(false);
     alert('Deployment successful: Origin nodes updated.');
   };
@@ -153,7 +153,7 @@ export default function DashboardClient({
       description: 'Mission description required...',
       tags: 'Protocol, System',
     };
-    const res = await createProject(newProject);
+    const res = await createProject(newProject) as any;
     if (res.success) {
       window.location.reload();
     }
