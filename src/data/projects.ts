@@ -14,6 +14,17 @@ export interface SkillCategory {
   skills: string[];
 }
 
+export interface Experience {
+  id: string;
+  company: string;
+  role: string;
+  duration: string;
+  description: string;
+  image?: string;
+  link?: string;
+  order: number;
+}
+
 export interface SiteContent {
   origin: {
     title: string;
@@ -78,3 +89,15 @@ export const staticSiteContent: SiteContent = {
     location: '[HIDDEN]'
   }
 };
+
+export const staticExperiences: Experience[] = [
+  {
+    id: '1',
+    company: 'Nexus Tech',
+    role: 'Lead Developer',
+    duration: '2023 - PRESENT',
+    description: 'Spearheading the development of decentralized autonomous systems and neural-interface protocols.',
+    link: 'https://example.com',
+    order: 1
+  }
+];

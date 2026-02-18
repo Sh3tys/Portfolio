@@ -3,8 +3,9 @@ import { Navbar } from '@/components/layout/Navbar';
 import { Hero } from '@/components/sections/Hero';
 import { Skills } from '@/components/sections/Skills';
 import { Contact } from '@/components/sections/Contact';
-import { getProjects, getSiteContent, getSkills } from '@/app/actions/projects';
-import { staticProjects, staticSiteContent, staticSkills } from '@/data/projects';
+import { ExperienceSection } from '@/components/sections/Experience';
+import { getProjects, getSiteContent, getSkills, getExperiences } from '@/app/actions/projects';
+import { staticProjects, staticSiteContent, staticSkills, staticExperiences } from '@/data/projects';
 import { ExternalLink, Github, Code2, Shield, User } from 'lucide-react';
 import Image from 'next/image';
 
@@ -12,16 +13,19 @@ export default async function Home() {
   let projects = await getProjects();
   let content = await getSiteContent();
   let skills = await getSkills();
+  let experiences = await getExperiences();
 
   if (projects.length === 0) projects = staticProjects as any;
   if (!content) content = staticSiteContent as any;
   if (skills.length === 0) skills = staticSkills as any;
+  if (experiences.length === 0) experiences = staticExperiences as any;
 
   return (
     <main className="min-h-screen bg-background relative selection:bg-primary/30 selection:text-white">
       <Navbar />
       <Hero />
       <Skills skills={skills} />
+      <ExperienceSection experiences={experiences} />
       
       {/* Projects Section */}
       <section id="projects" className="py-24 relative z-10">

@@ -2,9 +2,10 @@ export const dynamic = 'force-dynamic';
 import { 
   getProjects, 
   getSkills, 
-  getSiteContent 
+  getSiteContent,
+  getExperiences
 } from '@/app/actions/projects';
-import { staticProjects, staticSkills, staticSiteContent } from '@/data/projects';
+import { staticProjects, staticSkills, staticSiteContent, staticExperiences } from '@/data/projects';
 import { getServerSession } from 'next-auth';
 import LogoutButton from '@/components/admin/LogoutButton';
 import DashboardClient from './DashboardClient';
@@ -17,10 +18,12 @@ export default async function AdminDashboard() {
   let projects = await getProjects();
   let skills = await getSkills();
   let content = await getSiteContent();
+  let experiences = await getExperiences();
 
   if (projects.length === 0) projects = staticProjects as any;
   if (skills.length === 0) skills = staticSkills as any;
   if (!content) content = staticSiteContent as any;
+  if (experiences.length === 0) experiences = staticExperiences as any;
 
   return (
     <div className="min-h-screen bg-background text-foreground font-sans">
@@ -68,6 +71,7 @@ export default async function AdminDashboard() {
           initialProjects={projects} 
           initialSkills={skills} 
           initialContent={content} 
+          initialExperiences={experiences}
         />
       </main>
     </div>

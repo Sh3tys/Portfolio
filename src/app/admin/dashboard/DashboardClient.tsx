@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/Button';
 import {
   Trash2, Edit3, Save, X, Settings, Image as ImageIcon,
-  Type, Link as LinkIcon, Hash, Zap, User, Mail,
+  Type, Link as LinkIcon, Hash, Zap, User, Mail, Shield,
   Plus, Download, Cpu, Layout, Database, Code, CheckCircle2
 } from 'lucide-react';
 import {
@@ -12,11 +12,16 @@ import {
   deleteProject,
   updateSkillCategory,
   updateSiteContent,
-  createProject
+  createProject,
+  getExperiences,
+  createExperience,
+  updateExperience,
+  deleteExperience
 } from '@/app/actions/projects';
 import { uploadFile } from '@/app/actions/upload';
 import { useRef, useEffect } from 'react';
 import { Notification, NotificationType } from '@/components/ui/Notification';
+import { Experience } from '@/data/projects';
 
 interface Project {
   id: string;
@@ -56,13 +61,15 @@ interface SiteContent {
 export default function DashboardClient({
   initialProjects,
   initialSkills,
-  initialContent
+  initialContent,
+  initialExperiences
 }: {
   initialProjects: Project[],
   initialSkills: SkillCategory[],
-  initialContent: SiteContent
+  initialContent: SiteContent,
+  initialExperiences: Experience[]
 }) {
-  const [activeTab, setActiveTab] = useState<'missions' | 'stack' | 'origin' | 'identity'>('missions');
+  const [activeTab, setActiveTab] = useState<'missions' | 'stack' | 'experience' | 'origin' | 'identity'>('missions');
   
   const [projects, setProjects] = useState(initialProjects);
   const [editingProjectId, setEditingProjectId] = useState<string | null>(null);
@@ -71,6 +78,12 @@ export default function DashboardClient({
   const [skills, setSkills] = useState(initialSkills);
   const [editingSkillId, setEditingSkillId] = useState<string | null>(null);
   const [skillForm, setSkillForm] = useState<Partial<SkillCategory>>({});
+
+  const [experiences, setExperiences] = useState(initialExperiences);
+  const [editingExperienceId, setEditingExperienceId] = useState<string | null>(null);
+  const [experienceForm, setExperienceForm] = useState<Partial<Experience>>({});
+
+  const experienceImageInputRef = useRef<HTMLInputElement>(null);
 
   const [content, setContent] = useState(initialContent);
   const [isSaving, setIsSaving] = useState(false);
@@ -249,6 +262,63 @@ export default function DashboardClient({
     }
   };
 
+  const handleEditExperience = (exp: Experience) => {
+    setEditingExperienceId(exp.id);
+    setExperienceForm(exp);
+  };
+
+  const handleSaveExperience = async () => {
+    setIsSaving(true);
+    showNotification('SYNCING_EXPERIENCE_LOG...', 'loading');
+    try {
+      let res;
+      if (editingExperienceId === 'new') {
+        res = await createExperience(experienceForm);
+        if (res.success) {
+          setExperiences([...experiences, { ...experienceForm, id: res.id } as Experience]);
+          setEditingExperienceId(null);
+          showNotification('MISSION_EXPERIENCE_LOGGED', 'success');
+        }
+      } else {
+        res = await updateExperience(editingExperienceId!, experienceForm);
+        if (res.success) {
+          setExperiences(experiences.map(e => e.id === editingExperienceId ? { ...e, ...experienceForm } as Experience : e));
+          setEditingExperienceId(null);
+          showNotification('MISSION_EXPERIENCE_UPDATED', 'success');
+        }
+      }
+      if (!res?.success) {
+        showNotification(`SYNC_FAILED: ${res?.error || 'PROTOCOL_CORRUPTION'}`, 'error');
+      }
+    } catch (error) {
+      console.error('[EXPERIENCE_SAVE_ERROR]', error);
+      showNotification('SYNC_FAILED: ACCESS_DENIED', 'error');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleDeleteExperience = async (id: string) => {
+    if (!confirm('TERMINATE_EXPERIENCE_LOG?')) return;
+    setIsSaving(true);
+    try {
+      const res = await deleteExperience(id);
+      if (res.success) {
+        setExperiences(experiences.filter(e => e.id !== id));
+        showNotification('LOG_TERMINATED', 'success');
+      }
+    } catch (error) {
+      showNotification('SIGNAL_LOST', 'error');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleCreateExperience = () => {
+    setEditingExperienceId('new');
+    setExperienceForm({ company: '', role: '', duration: '', description: '', order: experiences.length + 1 });
+  };
+
   const handleCreateProject = async () => {
     const newProject = {
       title: 'NEW_MISSION',
@@ -265,25 +335,48 @@ export default function DashboardClient({
     <div className="space-y-8">
       {/* Navigation Tabs */}
       <div className="flex flex-wrap gap-2 border-b border-white/5 pb-4">
-        {[
-          { id: 'missions', label: 'ACTIVE_MISSIONS', icon: Layout },
-          { id: 'stack', label: 'TECHNICAL_STACK', icon: Cpu },
-          { id: 'origin', label: 'MISSION_ORIGIN', icon: User },
-          { id: 'identity', label: 'ESTABLISH_SIGNAL', icon: Mail },
-        ].map((tab) => (
+        <div className="flex flex-col gap-4">
           <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id as any)}
-            className={`flex items-center gap-2 px-4 py-2 font-mono text-xs uppercase tracking-widest transition-all ${
-              activeTab === tab.id
-                ? 'bg-primary text-background'
-                : 'text-foreground/40 hover:text-primary hover:bg-white/5'
+            onClick={() => setActiveTab('missions')}
+            className={`flex items-center gap-3 px-4 py-3 rounded-sm transition-all duration-300 font-mono text-xs uppercase tracking-widest ${
+              activeTab === 'missions' ? 'bg-primary/20 text-primary border-r-2 border-primary' : 'text-foreground/40 hover:bg-white/5'
             }`}
           >
-            <tab.icon className="w-4 h-4" />
-            {tab.label}
+            <Layout className="w-4 h-4" /> Missions_Log
           </button>
-        ))}
+          <button
+            onClick={() => setActiveTab('stack')}
+            className={`flex items-center gap-3 px-4 py-3 rounded-sm transition-all duration-300 font-mono text-xs uppercase tracking-widest ${
+              activeTab === 'stack' ? 'bg-secondary/20 text-secondary border-r-2 border-secondary' : 'text-foreground/40 hover:bg-white/5'
+            }`}
+          >
+            <Cpu className="w-4 h-4" /> capability_arsenal
+          </button>
+          <button
+            onClick={() => setActiveTab('experience')}
+            className={`flex items-center gap-3 px-4 py-3 rounded-sm transition-all duration-300 font-mono text-xs uppercase tracking-widest ${
+              activeTab === 'experience' ? 'bg-orange-500/20 text-orange-500 border-r-2 border-orange-500' : 'text-foreground/40 hover:bg-white/5'
+            }`}
+          >
+            <Database className="w-4 h-4" /> mission_history
+          </button>
+          <button
+            onClick={() => setActiveTab('origin')}
+            className={`flex items-center gap-3 px-4 py-3 rounded-sm transition-all duration-300 font-mono text-xs uppercase tracking-widest ${
+              activeTab === 'origin' ? 'bg-accent/20 text-accent border-r-2 border-accent' : 'text-foreground/40 hover:bg-white/5'
+            }`}
+          >
+            <Type className="w-4 h-4" /> Origin_Params
+          </button>
+          <button
+            onClick={() => setActiveTab('identity')}
+            className={`flex items-center gap-3 px-4 py-3 rounded-sm transition-all duration-300 font-mono text-xs uppercase tracking-widest ${
+              activeTab === 'identity' ? 'bg-white/10 text-white border-r-2 border-white' : 'text-foreground/40 hover:bg-white/5'
+            }`}
+          >
+            <Shield className="w-4 h-4" /> signal_protocols
+          </button>
+        </div>
       </div>
 
       <div className="min-h-[500px]">
@@ -376,21 +469,210 @@ export default function DashboardClient({
                           <Save className="w-4 h-4 mr-2" /> {isSaving ? 'SYNCING...' : 'SAVE'}
                         </Button>
                       )}
-                      <Button size="sm" variant="ghost" onClick={() => { setEditingSkillId(category.id); setSkillForm(category); }}><Edit3 className="w-4 h-4" /></Button>
+                      <Button size="sm" variant="ghost" onClick={() => { 
+                        if (editingSkillId === category.id) {
+                          setEditingSkillId(null);
+                        } else {
+                          setEditingSkillId(category.id); 
+                          setSkillForm(category); 
+                        }
+                      }}>
+                        {editingSkillId === category.id ? <X className="w-4 h-4" /> : <Edit3 className="w-4 h-4" />}
+                      </Button>
                     </div>
                   </div>
-                  <div className="flex flex-wrap gap-2">
-                    {category.skills.map(skill => (
-                      <span key={skill} className="px-3 py-1 bg-white/5 rounded-full text-[10px] font-mono border border-white/10 uppercase">
-                        {skill}
-                      </span>
-                    ))}
-                  </div>
+                  
+                  {editingSkillId === category.id ? (
+                    <div className="space-y-4">
+                      <div>
+                        <label className="text-[10px] font-mono text-white/20 uppercase mb-2 block">Skill_Protocol_Stream (Comma Separated)</label>
+                        <textarea 
+                          className="w-full bg-black/50 border border-white/10 p-3 font-mono text-xs text-secondary outline-none h-24"
+                          value={skillForm.skills?.join(', ')}
+                          onChange={e => setSkillForm({...skillForm, skills: e.target.value.split(',').map(s => s.trim())})}
+                        />
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex flex-wrap gap-2">
+                      {category.skills.map(skill => (
+                        <span key={skill} className="px-3 py-1 bg-white/5 rounded-full text-[10px] font-mono border border-white/10 uppercase">
+                          {skill}
+                        </span>
+                      ))}
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
           </div>
         )}
+
+        {activeTab === 'experience' && (
+          <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-500">
+            <div className="flex justify-between items-center">
+              <h2 className="text-xl font-bold font-mono text-orange-500 uppercase tracking-tighter">MISSION_HISTORY</h2>
+              <Button size="sm" onClick={handleCreateExperience} disabled={editingExperienceId !== null}>
+                <Plus className="w-4 h-4 mr-2" /> INJECT_HISTORY
+              </Button>
+            </div>
+            
+            <div className="grid grid-cols-1 gap-6">
+              {editingExperienceId && (
+                <div className="glass p-8 border-l-4 border-l-orange-500 space-y-6">
+                  <div className="flex justify-between items-center border-b border-white/5 pb-4">
+                    <h3 className="font-mono text-lg uppercase tracking-tighter text-orange-400">
+                      {editingExperienceId === 'new' ? 'NEW_EXPERIENCE_PROTOCOL' : 'UPDATE_EXPERIENCE_LOG'}
+                    </h3>
+                    <Button variant="ghost" size="sm" onClick={() => setEditingExperienceId(null)}>
+                      <X className="w-4 h-4" />
+                    </Button>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="space-y-4">
+                      <div className="aspect-square bg-white/5 border border-dashed border-white/10 rounded-sm flex flex-col items-center justify-center group relative overflow-hidden">
+                        {experienceForm.image ? (
+                          <div className="w-full h-full relative p-4">
+                             <img 
+                               src={experienceForm.image} 
+                               alt="Logo" 
+                               className="w-full h-full object-contain"
+                             />
+                             <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                                <Button size="sm" onClick={() => experienceImageInputRef.current?.click()}>CHANGE_LOGO</Button>
+                             </div>
+                          </div>
+                        ) : (
+                          <div className="text-center p-4">
+                            <ImageIcon className="w-12 h-12 text-white/10 mb-4 mx-auto" />
+                            <Button size="sm" onClick={() => experienceImageInputRef.current?.click()}>UPLOAD_LOGO</Button>
+                          </div>
+                        )}
+                        <input 
+                          type="file" 
+                          ref={experienceImageInputRef} 
+                          className="hidden" 
+                          accept="image/*"
+                          onChange={async (e) => {
+                            const file = e.target.files?.[0];
+                            if (file) {
+                              showNotification('OPTIMIZING_LOGO...', 'loading');
+                              const url = await resizeImage(file);
+                              setExperienceForm({...experienceForm, image: url});
+                              showNotification('LOGO_OPTIMIZED', 'success');
+                            }
+                          }}
+                        />
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-4">
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <label className="text-[10px] font-mono text-white/20 uppercase">COMPANY</label>
+                          <input className="w-full bg-black/50 border border-white/10 p-3 font-mono text-xs text-white outline-none focus:border-orange-500/50" value={experienceForm.company} onChange={e => setExperienceForm({...experienceForm, company: e.target.value})} />
+                        </div>
+                        <div className="space-y-2">
+                          <label className="text-[10px] font-mono text-white/20 uppercase">ROLE</label>
+                          <input className="w-full bg-black/50 border border-white/10 p-3 font-mono text-xs text-white outline-none focus:border-orange-500/50" value={experienceForm.role} onChange={e => setExperienceForm({...experienceForm, role: e.target.value})} />
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <label className="text-[10px] font-mono text-white/20 uppercase">DURATION</label>
+                          <input className="w-full bg-black/50 border border-white/10 p-3 font-mono text-xs text-white outline-none focus:border-orange-500/50" placeholder="e.g. 2022 - 2024" value={experienceForm.duration} onChange={e => setExperienceForm({...experienceForm, duration: e.target.value})} />
+                        </div>
+                        <div className="space-y-2">
+                          <label className="text-[10px] font-mono text-white/20 uppercase">COMP_LINK</label>
+                          <input className="w-full bg-black/50 border border-white/10 p-3 font-mono text-xs text-white outline-none focus:border-orange-500/50" value={experienceForm.link} onChange={e => setExperienceForm({...experienceForm, link: e.target.value})} />
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-[10px] font-mono text-white/20 uppercase">DESCRIPTION</label>
+                        <textarea className="w-full bg-black/50 border border-white/10 p-3 font-mono text-xs text-white/60 h-32 outline-none focus:border-orange-500/50" value={experienceForm.description} onChange={e => setExperienceForm({...experienceForm, description: e.target.value})} />
+                      </div>
+                      <div className="flex justify-end gap-4 pt-4">
+                        <Button variant="ghost" onClick={() => setEditingExperienceId(null)}>CANCEL</Button>
+                        <Button glow onClick={handleSaveExperience} disabled={isSaving}>
+                          {isSaving ? 'SYNCING...' : 'SAVE_EXPERIENCE'}
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              <div className="relative space-y-8 pl-8 border-l border-white/10 ml-4">
+                {experiences.length === 0 && (
+                  <div className="text-center py-12 text-white/20 font-mono text-sm uppercase italic">
+                    No mission history logged. Initiate first entry.
+                  </div>
+                )}
+                {experiences.map((exp, index) => (
+                  <div key={exp.id} className="relative group animate-in slide-in-from-right-4 duration-500" style={{ animationDelay: `${index * 100}ms` }}>
+                    {/* Timeline Node */}
+                    <div className="absolute -left-[42px] top-6 w-5 h-5 rounded-full bg-black border-2 border-orange-500/50 z-10 group-hover:bg-orange-500 group-hover:border-orange-500 transition-all duration-300 shadow-[0_0_0_rgba(249,115,22,0)] group-hover:shadow-[0_0_15px_rgba(249,115,22,0.6)] flex items-center justify-center">
+                       <div className="w-1.5 h-1.5 rounded-full bg-white/50 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </div>
+                    
+                    {/* Content Card */}
+                    <div className="glass p-6 border border-white/5 hover:border-orange-500/50 transition-all duration-300 relative overflow-hidden group-hover:translate-x-2">
+                      <div className="absolute inset-0 bg-gradient-to-r from-orange-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+                      
+                      <div className="flex flex-col md:flex-row gap-6 relative z-10">
+                        <div className="w-16 h-16 rounded-md bg-white/5 flex-shrink-0 flex items-center justify-center p-2 border border-white/10 group-hover:border-orange-500/30 transition-colors">
+                          {exp.image ? (
+                            <img src={exp.image} alt={exp.company} className="w-full h-full object-contain filter grayscale group-hover:grayscale-0 transition-all duration-500" />
+                          ) : (
+                            <ImageIcon className="w-6 h-6 text-white/10 group-hover:text-orange-500 transition-colors" />
+                          )}
+                        </div>
+                        
+                        <div className="flex-grow space-y-2">
+                          <div className="flex justify-between items-start">
+                            <div>
+                              <h4 className="font-bold text-lg uppercase tracking-tight text-white group-hover:text-orange-400 transition-colors">{exp.company}</h4>
+                              <p className="text-xs font-mono text-orange-500/80 uppercase tracking-widest mb-1">{exp.role}</p>
+                              <div className="inline-flex items-center px-2 py-0.5 rounded-full bg-white/5 text-[10px] font-mono text-white/40 border border-white/5 group-hover:border-orange-500/20 transition-colors">
+                                {exp.duration}
+                              </div>
+                            </div>
+                            
+                            <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-4 group-hover:translate-x-0">
+                              <Button variant="outline" size="sm" onClick={() => handleEditExperience(exp)} className="hover:bg-orange-500/10 hover:text-orange-500 border-white/10">
+                                <Edit3 className="w-3.5 h-3.5" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="text-red-500/50 hover:text-red-500 hover:bg-red-500/10"
+                                onClick={() => handleDeleteExperience(exp.id)}
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </Button>
+                            </div>
+                          </div>
+                          
+                          <p className="text-sm text-white/60 font-light leading-relaxed max-w-2xl group-hover:text-white/80 transition-colors">
+                            {exp.description}
+                          </p>
+                          
+                          {exp.link && (
+                            <a href={exp.link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-[10px] font-mono uppercase text-white/30 hover:text-orange-400 transition-colors mt-2">
+                              <LinkIcon className="w-3 h-3" /> External_Link
+                            </a>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
 
         {activeTab === 'origin' && (
           <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-500 max-w-4xl">
